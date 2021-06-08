@@ -10,11 +10,6 @@ import android.view.ViewGroup;
 
 import com.viostaticapp.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SearchFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SearchFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
