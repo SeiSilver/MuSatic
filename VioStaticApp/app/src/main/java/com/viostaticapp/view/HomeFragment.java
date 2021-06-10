@@ -41,7 +41,6 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         List<CategoryItem> categoryItems = new ArrayList<>();
         categoryItems.add(new CategoryItem(1, R.drawable.test1));
         categoryItems.add(new CategoryItem(1, R.drawable.test2));
