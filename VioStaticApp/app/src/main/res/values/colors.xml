@@ -12,5 +12,11 @@
     <color name="gray_second">#FF484848</color>
     <color name="gray_light">#FFcfcfcf</color>
 
+    <color name="backgroundColor">#FF1a1a1b</color>
+    <color name="navbarColor">#FF333f44</color>
+    <color name="iconHighLight">#FF37aa9c</color>
+    <color name="iconHighLightSoft">#FF94f3e4</color>
+
+
 
 </resources>

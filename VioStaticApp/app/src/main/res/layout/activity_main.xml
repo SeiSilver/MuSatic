@@ -22,12 +22,16 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/nav_background_curved"
+        app:itemIconTint="@drawable/nav_tab_color"
+        app:itemTextColor="@drawable/nav_tab_color"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nav_host_fragment_container"
-        app:menu="@menu/bottom_menu" />
+        app:menu="@menu/bottom_menu"
+
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
