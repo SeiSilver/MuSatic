@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.viostaticapp.R;
-import com.viostaticapp.model.AllCategory;
-import com.viostaticapp.model.CategoryItem;
+import com.viostaticapp.data.model.AllCategory;
+import com.viostaticapp.data.model.CategoryItem;
 
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     private void setCategoryItemRecycler(RecyclerView recyclerView, List<CategoryItem> categoryItems) {
 
-        HomeVerticalItemAdapter itemAdapter = new HomeVerticalItemAdapter(context, categoryItems);
+        HomeItemAdapter itemAdapter = new HomeItemAdapter(context, categoryItems);
         recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
         recyclerView.setAdapter(itemAdapter);
 

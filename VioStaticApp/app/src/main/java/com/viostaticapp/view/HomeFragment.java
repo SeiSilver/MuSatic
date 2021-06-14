@@ -5,18 +5,16 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.viostaticapp.R;
-import com.viostaticapp.model.AllCategory;
-import com.viostaticapp.model.CategoryItem;
+import com.viostaticapp.data.model.AllCategory;
+import com.viostaticapp.data.model.CategoryItem;
 import com.viostaticapp.present.homePresent.HomeAdapter;
 
 import java.util.ArrayList;
@@ -51,7 +49,6 @@ public class HomeFragment extends Fragment {
 
         allCategoryList = new ArrayList<>();
         allCategoryList.add(new AllCategory("Recommend", categoryItems));
-        allCategoryList.add(new AllCategory("Recently", categoryItems));
         allCategoryList.add(new AllCategory("Hot Trend", categoryItems));
         allCategoryList.add(new AllCategory("Favourite", categoryItems));
 

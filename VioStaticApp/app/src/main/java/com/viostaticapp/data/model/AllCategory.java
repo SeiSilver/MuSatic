@@ -1,4 +1,4 @@
-package com.viostaticapp.model;
+package com.viostaticapp.data.model;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import lombok.Data;
 public class AllCategory {
 
     private String categoryTitle;
+
     private List<CategoryItem> categoryItemList;
 
     public AllCategory(String categoryTitle) {

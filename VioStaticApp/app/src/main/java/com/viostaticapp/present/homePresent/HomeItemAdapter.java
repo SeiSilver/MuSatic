@@ -11,16 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.viostaticapp.R;
-import com.viostaticapp.model.CategoryItem;
+import com.viostaticapp.data.model.CategoryItem;
 
 import java.util.List;
 
-public class HomeVerticalItemAdapter extends RecyclerView.Adapter<HomeVerticalItemAdapter.HomeViewHolder> {
+public class HomeItemAdapter extends RecyclerView.Adapter<HomeItemAdapter.HomeViewHolder> {
 
     private Context context;
     private List<CategoryItem> categoryItemList;
 
-    public HomeVerticalItemAdapter(Context context, List<CategoryItem> categoryItemList) {
+    public HomeItemAdapter(Context context, List<CategoryItem> categoryItemList) {
         this.context = context;
         this.categoryItemList = categoryItemList;
     }
@@ -35,7 +35,7 @@ public class HomeVerticalItemAdapter extends RecyclerView.Adapter<HomeVerticalIt
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HomeVerticalItemAdapter.HomeViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HomeItemAdapter.HomeViewHolder holder, int position) {
 
         holder.imageView.setImageResource(categoryItemList.get(position).getImage());
         holder.textView.setSelected(true);

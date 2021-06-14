@@ -2,18 +2,17 @@ package com.viostaticapp.view;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.viostaticapp.R;
+import com.viostaticapp.service.YoutubeAPISearch;
+import com.viostaticapp.service.YoutubeAPISearchImp;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,14 +37,23 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+        initData();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.base_toolbar_menu, menu);
         return super.onCreateOptionsMenu(menu);
+
     }
 
+    private void initData() {
+
+//        YoutubeAPISearch youtubeAPISearch = new YoutubeAPISearchImp();
+//        youtubeAPISearch.getAndSaveVideoToDatabase("music");
+
+        YoutubeAPISearch test = new YoutubeAPISearchImp();
+        test.search("music");
+    }
 
 }

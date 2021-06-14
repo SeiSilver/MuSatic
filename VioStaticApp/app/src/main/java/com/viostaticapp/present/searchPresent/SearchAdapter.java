@@ -5,13 +5,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.viostaticapp.R;
-import com.viostaticapp.model.CategoryItem;
-import com.viostaticapp.present.homePresent.HomeAdapter;
-import com.viostaticapp.present.homePresent.HomeVerticalItemAdapter;
+import com.viostaticapp.data.model.CategoryItem;
 
 import java.util.List;
 
