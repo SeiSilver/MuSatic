@@ -1,28 +1,34 @@
 package com.viostaticapp.present.homePresent;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.viostaticapp.R;
-import com.viostaticapp.model.CategoryItem;
+import com.viostaticapp.data.model.AllCategory;
+import com.viostaticapp.data.model.CategoryItem;
+import com.viostaticapp.data.model.YoutubeVideo;
 
 import java.util.List;
 
-public class HomeVerticalItemAdapter extends RecyclerView.Adapter<HomeVerticalItemAdapter.HomeViewHolder> {
+public class HomeLatestAdapter extends RecyclerView.Adapter<HomeLatestAdapter.HomeViewHolder> {
 
     private Context context;
-    private List<CategoryItem> categoryItemList;
+    private List<YoutubeVideo> latestVideoList;
 
-    public HomeVerticalItemAdapter(Context context, List<CategoryItem> categoryItemList) {
+    public HomeLatestAdapter(Context context, List<YoutubeVideo> latestVideoList) {
         this.context = context;
-        this.categoryItemList = categoryItemList;
+        this.latestVideoList = latestVideoList;
     }
 
     @NonNull
@@ -35,15 +41,19 @@ public class HomeVerticalItemAdapter extends RecyclerView.Adapter<HomeVerticalIt
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HomeVerticalItemAdapter.HomeViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HomeLatestAdapter.HomeViewHolder holder, int position) {
 
-        holder.imageView.setImageResource(categoryItemList.get(position).getImage());
+        String url = latestVideoList.get(position).getThumbnail();
+        Picasso.get().load(url).fit().centerCrop(2).placeholder(R.drawable.img_not_found).into(holder.imageView);
+
+        holder.textView.setText(latestVideoList.get(position).getTitle());
         holder.textView.setSelected(true);
+
     }
 
     @Override
     public int getItemCount() {
-        return categoryItemList.size();
+        return latestVideoList.size();
     }
 
     class HomeViewHolder extends RecyclerView.ViewHolder {
@@ -57,4 +67,5 @@ public class HomeVerticalItemAdapter extends RecyclerView.Adapter<HomeVerticalIt
             textView = itemView.findViewById(R.id.text_video_name);
         }
     }
+
 }

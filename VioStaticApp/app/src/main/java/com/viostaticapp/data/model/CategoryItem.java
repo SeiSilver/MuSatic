@@ -1,4 +1,4 @@
-package com.viostaticapp.model;
+package com.viostaticapp.data.model;
 
 import lombok.Data;
 
@@ -13,6 +13,5 @@ public class CategoryItem {
         this.id = id;
         this.image = image;
     }
-
 
 }
