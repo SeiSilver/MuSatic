@@ -40,8 +40,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.HomeViewHo
         public HomeViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            categoryTitle = itemView.findViewById(R.id.category_title);
-            recyclerView = itemView.findViewById(R.id.item_row_recycler);
+//            categoryTitle = itemView.findViewById(R.id.category_title);
+//            recyclerView = itemView.findViewById(R.id.item_row_recycler);
         }
 
     }

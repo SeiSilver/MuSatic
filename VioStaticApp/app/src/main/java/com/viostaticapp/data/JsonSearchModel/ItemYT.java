@@ -1,8 +1,13 @@
-package com.viostaticapp.data.JsonYoutubeAPIModel;
+package com.viostaticapp.data.JsonSearchModel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ItemYT {
 
     @SerializedName("id")
@@ -21,19 +26,4 @@ public class ItemYT {
     public ItemYT() {
     }
 
-    public VideoID getId() {
-        return id;
-    }
-
-    public void setId(VideoID id) {
-        this.id = id;
-    }
-
-    public SnippetYT getSnippet() {
-        return snippet;
-    }
-
-    public void setSnippet(SnippetYT snippet) {
-        this.snippet = snippet;
-    }
 }

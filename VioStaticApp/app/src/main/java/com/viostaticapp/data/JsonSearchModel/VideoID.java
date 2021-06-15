@@ -1,11 +1,14 @@
-package com.viostaticapp.data.JsonYoutubeAPIModel;
+package com.viostaticapp.data.JsonSearchModel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class VideoID {
 
     @SerializedName("videoId")
@@ -19,11 +22,4 @@ public class VideoID {
     public VideoID() {
     }
 
-    public String getVideoId() {
-        return videoId;
-    }
-
-    public void setVideoId(String videoId) {
-        this.videoId = videoId;
-    }
 }

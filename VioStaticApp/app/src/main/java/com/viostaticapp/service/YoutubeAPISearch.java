@@ -1,7 +1,11 @@
 package com.viostaticapp.service;
 
+import com.viostaticapp.data.model.YoutubeVideo;
+
+import java.util.ArrayList;
+
 public interface YoutubeAPISearch {
 
-    boolean search(String query);
+    void search(String query);
 
 }

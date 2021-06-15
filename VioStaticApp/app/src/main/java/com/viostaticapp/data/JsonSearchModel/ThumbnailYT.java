@@ -1,13 +1,17 @@
-package com.viostaticapp.data.JsonYoutubeAPIModel;
+package com.viostaticapp.data.JsonSearchModel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ThumbnailYT {
 
-    @SerializedName("high")
+    @SerializedName("medium")
     @Expose
     private HighThumbnail thumbnailHigh;
 
@@ -18,7 +22,8 @@ public class ThumbnailYT {
     public ThumbnailYT() {
     }
 
-    @Data
+    @Getter
+    @Setter
     public class HighThumbnail {
 
         @SerializedName("url")
@@ -32,20 +37,7 @@ public class ThumbnailYT {
         public HighThumbnail() {
         }
 
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
     }
 
-    public HighThumbnail getThumbnailHigh() {
-        return thumbnailHigh;
-    }
 
-    public void setThumbnailHigh(HighThumbnail thumbnailHigh) {
-        this.thumbnailHigh = thumbnailHigh;
-    }
 }

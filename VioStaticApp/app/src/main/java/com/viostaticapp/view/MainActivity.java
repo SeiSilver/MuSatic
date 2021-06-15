@@ -1,6 +1,8 @@
 package com.viostaticapp.view;
 
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.Menu;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +15,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.viostaticapp.R;
 import com.viostaticapp.service.YoutubeAPISearch;
 import com.viostaticapp.service.YoutubeAPISearchImp;
+
+import org.apache.commons.text.StringEscapeUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,11 +53,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData() {
 
-//        YoutubeAPISearch youtubeAPISearch = new YoutubeAPISearchImp();
-//        youtubeAPISearch.getAndSaveVideoToDatabase("music");
+        String titleFormat = StringEscapeUtils.unescapeHtml4("&nbsp;asdasdasd adasd");
 
-        YoutubeAPISearch test = new YoutubeAPISearchImp();
-        test.search("music");
+        Log.e("ads", "asd");
+
+
+//        YoutubeAPISearch test = new YoutubeAPISearchImp();
+//        test.search("son tung");
+//        test.search("yoasobi");
+//        test.search("eve");
+//        test.search("relaxing music sleep");
+//        test.search("phe phim");
+//        test.search("phe game");
+//        test.search("english song");
+
     }
 
 }
