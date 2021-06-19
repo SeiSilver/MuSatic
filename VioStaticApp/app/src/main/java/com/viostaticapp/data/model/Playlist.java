@@ -1,6 +1,8 @@
 package com.viostaticapp.data.model;
 
-public class Playlist {
+import java.io.Serializable;
+
+public class Playlist implements Serializable {
 
     private String id;
 

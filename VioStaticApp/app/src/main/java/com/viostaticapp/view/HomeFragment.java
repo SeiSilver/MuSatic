@@ -1,5 +1,6 @@
 package com.viostaticapp.view;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,8 +22,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.viostaticapp.R;
 import com.viostaticapp.data.EnumInit;
-import com.viostaticapp.data.model.AllCategory;
-import com.viostaticapp.data.model.CategoryItem;
 import com.viostaticapp.data.model.Channel;
 import com.viostaticapp.data.model.YoutubeVideo;
 import com.viostaticapp.present.homePresent.HomeLatestAdapter;
@@ -41,8 +40,10 @@ public class HomeFragment extends Fragment {
     HomeRecommendAdapter homeRecommendAdapter;
     FirebaseFirestore database = FirebaseFirestore.getInstance();
 
-    List<YoutubeVideo> latestVideoList = new ArrayList<>();
-    List<YoutubeVideo> recommendVideoList = new ArrayList<>();
+    static List<YoutubeVideo> latestVideoList = new ArrayList<>();
+    static List<YoutubeVideo> recommendVideoList = new ArrayList<>();
+
+    ProgressDialog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,7 +56,10 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        dialog = new ProgressDialog(getContext());
+        dialog.setTitle("Notification");
+        dialog.setMessage("Getting data");
+        dialog.show();
         setHomeLatestRecycler();
         setHomeRecommendRecycler();
     }
@@ -75,7 +79,6 @@ public class HomeFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
                         for (DocumentSnapshot doc : task.getResult()) {
 
                             YoutubeVideo video = new YoutubeVideo();
@@ -88,8 +91,9 @@ public class HomeFragment extends Fragment {
                             video.setThumbnail(doc.getString("thumbnail"));
 
                             latestVideoList.add(video);
-                            homeLatestAdapter.notifyDataSetChanged();
                         }
+                        homeLatestAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -117,7 +121,6 @@ public class HomeFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
                         for (DocumentSnapshot doc : task.getResult()) {
 
                             YoutubeVideo video = new YoutubeVideo();
@@ -130,8 +133,9 @@ public class HomeFragment extends Fragment {
                             video.setThumbnail(doc.getString("thumbnail"));
 
                             recommendVideoList.add(video);
-                            homeRecommendAdapter.notifyDataSetChanged();
                         }
+                        homeRecommendAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

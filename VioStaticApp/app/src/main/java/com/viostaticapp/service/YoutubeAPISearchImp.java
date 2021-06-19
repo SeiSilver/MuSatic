@@ -3,6 +3,7 @@ package com.viostaticapp.service;
 import android.util.Log;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.viostaticapp._config.YoutubeAPIConfig;
 import com.viostaticapp.data.EnumInit;
 import com.viostaticapp.data.model.Channel;
 import com.viostaticapp.data.model.YoutubeVideo;
@@ -23,7 +24,7 @@ import retrofit2.http.Url;
 
 public class YoutubeAPISearchImp implements YoutubeAPISearch {
 
-    private final String APIKEY = "AIzaSyDCsqdJIEIZUs9xugVEfamZ-ebWeiewpBI";
+    private final String APIKEY = YoutubeAPIConfig.KEY;
     private final String BASE_URL = "https://youtube.googleapis.com/youtube/v3/";
     private final String schema = "search?";
 
