@@ -14,7 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VioStaticAppCustom"
         android:usesCleartextTraffic="true">
+      
+        <activity android:name=".view.SignupActivity" ></activity>
+        <activity android:name=".view.LoginActivity" ></activity>
         <activity android:name=".view.YoutubePlayerActivity"></activity>
+
         <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
