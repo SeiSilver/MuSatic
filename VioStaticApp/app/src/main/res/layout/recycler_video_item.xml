@@ -43,11 +43,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
-                android:ellipsize="marquee"
                 android:fontFamily="@font/opensans_bold"
-                android:marqueeRepeatLimit="marquee_forever"
                 android:maxWidth="200dp"
-                android:scrollHorizontally="true"
                 android:singleLine="true"
                 android:text="【ほしまちメドレー】星街すいせい 歌枠メドレー Vol.7 (Hoshimachi Suisei Medley Vol.7)【作業用BGM】
 "

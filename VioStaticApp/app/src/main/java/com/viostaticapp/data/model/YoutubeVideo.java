@@ -4,10 +4,12 @@ import com.google.firebase.Timestamp;
 
 import org.apache.commons.text.StringEscapeUtils;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class YoutubeVideo {
+public class YoutubeVideo implements Serializable {
 
     private String id;
 

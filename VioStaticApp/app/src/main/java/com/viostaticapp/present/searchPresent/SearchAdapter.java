@@ -1,56 +1,78 @@
 package com.viostaticapp.present.searchPresent;
 
+import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
 import com.viostaticapp.R;
-import com.viostaticapp.data.model.CategoryItem;
+import com.viostaticapp.data.model.YoutubeVideo;
+import com.viostaticapp.view.YoutubePlayerActivity;
 
 import java.util.List;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.HomeViewHolder> {
+public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.CustomViewHolder> {
 
+    private Context context;
+    private List<YoutubeVideo> videoList;
 
+    public SearchAdapter(Context context, List<YoutubeVideo> videoList) {
+        this.context = context;
+        this.videoList = videoList;
+    }
 
     @NonNull
     @Override
-    public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+    public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.recycler_video_item, parent, false);
+        return new CustomViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchAdapter.HomeViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SearchAdapter.CustomViewHolder holder, int position) {
+
+        String url = videoList.get(position).getThumbnail();
+        Picasso.get().load(url).fit().centerCrop(2).placeholder(R.drawable.img_not_found).into(holder.rec_image_item);
+
+        holder.rec_video_name.setText(videoList.get(position).getTitle());
+        holder.date_publish_text.setText(videoList.get(position).getPublishedAt());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, YoutubePlayerActivity.class);
+                intent.putExtra("youtubeVideo", videoList.get(position));
+                context.startActivity(intent);
+            }
+        });
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return videoList.size();
     }
 
-    class HomeViewHolder extends RecyclerView.ViewHolder {
+    class CustomViewHolder extends RecyclerView.ViewHolder {
 
-        TextView categoryTitle;
-        RecyclerView recyclerView;
+        ImageView rec_image_item;
+        TextView rec_video_name, date_publish_text;
+        View itemView;
 
-        public HomeViewHolder(@NonNull View itemView) {
+        public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
-
-//            categoryTitle = itemView.findViewById(R.id.category_title);
-//            recyclerView = itemView.findViewById(R.id.item_row_recycler);
+            rec_image_item = itemView.findViewById(R.id.rec_image_item);
+            rec_video_name = itemView.findViewById(R.id.rec_video_name);
+            date_publish_text = itemView.findViewById(R.id.date_publish_text);
+            this.itemView = itemView;
         }
-
-    }
-
-    private void setCategoryItemRecycler(RecyclerView recyclerView, List<CategoryItem> categoryItems) {
-
-//        HomeVerticalItemAdapter itemAdapter = new HomeVerticalItemAdapter(context, categoryItems);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
-//        recyclerView.setAdapter(itemAdapter);
 
     }
 
