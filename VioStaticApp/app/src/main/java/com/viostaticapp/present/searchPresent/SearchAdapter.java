@@ -64,14 +64,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.CustomView
 
         ImageView rec_image_item;
         TextView rec_video_name, date_publish_text;
-        View itemView;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
             rec_image_item = itemView.findViewById(R.id.rec_image_item);
             rec_video_name = itemView.findViewById(R.id.rec_video_name);
             date_publish_text = itemView.findViewById(R.id.date_publish_text);
-            this.itemView = itemView;
         }
 
     }

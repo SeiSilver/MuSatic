@@ -107,7 +107,7 @@ public class HomeFragment extends Fragment {
                             video.setVideoUrl(doc.getString("videoUrl"));
                             video.setPublishedAt(doc.getString("publishedAt"));
                             video.setThumbnail(doc.getString("thumbnail"));
-                            video.setTitle(doc.getString("description"));
+                            video.setDescription(doc.getString("description"));
                             video.setChannel(doc.get("channel", Channel.class));
 
                             latestVideoList.add(video);
@@ -142,6 +142,7 @@ public class HomeFragment extends Fragment {
                             video.setPublishedAt(doc.getString("publishedAt"));
                             video.setChannel(doc.get("channel", Channel.class));
                             video.setThumbnail(doc.getString("thumbnail"));
+                            video.setDescription(doc.getString("description"));
 
                             recommendVideoList.add(video);
                         }
