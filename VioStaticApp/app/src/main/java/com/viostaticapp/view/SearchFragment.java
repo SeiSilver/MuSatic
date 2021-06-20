@@ -81,6 +81,8 @@ public class SearchFragment extends Fragment {
                             video.setPublishedAt(doc.getString("publishedAt"));
                             video.setChannel(doc.get("channel", Channel.class));
                             video.setThumbnail(doc.getString("thumbnail"));
+                            video.setDescription(doc.getString("description"));
+
                             videoList.add(video);
                         }
                         searchAdapter.notifyDataSetChanged();

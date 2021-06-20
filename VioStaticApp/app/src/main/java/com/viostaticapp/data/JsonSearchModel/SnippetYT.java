@@ -10,35 +10,16 @@ import lombok.Setter;
 @Setter
 public class SnippetYT {
 
-    @SerializedName("publishedAt")
-    @Expose
-    private String publishedAt;
-
-    @SerializedName("title")
-    @Expose
     private String title;
 
-    @SerializedName("channelId")
-    @Expose
+    private String description;
+
     private String channelId;
 
-    @SerializedName("channelTitle")
-    @Expose
     private String channelTitle;
 
-    @SerializedName("thumbnails")
-    @Expose
-    private ThumbnailYT thumbnail;
+    private ThumbnailYT thumbnails;
 
-    public SnippetYT() {
-    }
-
-    public SnippetYT(String publishedAt, String title, String channelId, String channelTitle, ThumbnailYT thumbnail) {
-        this.publishedAt = publishedAt;
-        this.title = title;
-        this.channelId = channelId;
-        this.channelTitle = channelTitle;
-        this.thumbnail = thumbnail;
-    }
+    private String publishedAt;
 
 }

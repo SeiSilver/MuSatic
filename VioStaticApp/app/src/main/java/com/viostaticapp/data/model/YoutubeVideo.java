@@ -15,6 +15,8 @@ public class YoutubeVideo implements Serializable {
 
     private String title;
 
+    private String description;
+
     private String thumbnail;
 
     private String videoUrl;

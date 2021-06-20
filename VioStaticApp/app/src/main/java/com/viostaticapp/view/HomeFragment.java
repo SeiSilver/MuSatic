@@ -40,8 +40,8 @@ public class HomeFragment extends Fragment {
     HomeRecommendAdapter homeRecommendAdapter;
     FirebaseFirestore database = FirebaseFirestore.getInstance();
 
-    static List<YoutubeVideo> latestVideoList = new ArrayList<>();
-    static List<YoutubeVideo> recommendVideoList = new ArrayList<>();
+    List<YoutubeVideo> latestVideoList = new ArrayList<>();
+    List<YoutubeVideo> recommendVideoList = new ArrayList<>();
 
     ProgressDialog dialog;
 
@@ -60,8 +60,11 @@ public class HomeFragment extends Fragment {
         dialog.setTitle("Notification");
         dialog.setMessage("Getting data");
         dialog.show();
+
         setHomeLatestRecycler();
         setHomeRecommendRecycler();
+
+        setDataForList();
     }
 
     private void setHomeLatestRecycler() {
@@ -73,7 +76,23 @@ public class HomeFragment extends Fragment {
         homeLatestAdapter = new HomeLatestAdapter(getContext(), latestVideoList);
         homeLatestRecycler.setAdapter(homeLatestAdapter);
 
-        database.collection(EnumInit.Table.YoutubeVideo.name).orderBy("publishedAt", Query.Direction.DESCENDING)
+    }
+
+    private void setHomeRecommendRecycler() {
+
+        homeRecommendRecycler = this.getView().findViewById(R.id.recommend_row_recycler);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
+                RecyclerView.VERTICAL, false);
+        homeRecommendRecycler.setLayoutManager(layoutManager);
+        homeRecommendAdapter = new HomeRecommendAdapter(getContext(), recommendVideoList);
+        homeRecommendRecycler.setAdapter(homeRecommendAdapter);
+
+    }
+
+    private void setDataForList() {
+
+        database.collection(EnumInit.Table.YoutubeVideo.name)
+                .orderBy("publishedAt", Query.Direction.DESCENDING)
                 .limit(10)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -87,8 +106,9 @@ public class HomeFragment extends Fragment {
                             video.setTitle(doc.getString("title"));
                             video.setVideoUrl(doc.getString("videoUrl"));
                             video.setPublishedAt(doc.getString("publishedAt"));
-                            video.setChannel(doc.get("channel", Channel.class));
                             video.setThumbnail(doc.getString("thumbnail"));
+                            video.setTitle(doc.getString("description"));
+                            video.setChannel(doc.get("channel", Channel.class));
 
                             latestVideoList.add(video);
                         }
@@ -103,16 +123,7 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
-    }
-
-    private void setHomeRecommendRecycler() {
-
-        homeRecommendRecycler = this.getView().findViewById(R.id.recommend_row_recycler);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
-                RecyclerView.VERTICAL, false);
-        homeRecommendRecycler.setLayoutManager(layoutManager);
-        homeRecommendAdapter = new HomeRecommendAdapter(getContext(), recommendVideoList);
-        homeRecommendRecycler.setAdapter(homeRecommendAdapter);
+        // set list for
 
         database.collection(EnumInit.Table.YoutubeVideo.name)
                 .orderBy("title")
@@ -146,4 +157,5 @@ public class HomeFragment extends Fragment {
                 });
 
     }
+
 }
