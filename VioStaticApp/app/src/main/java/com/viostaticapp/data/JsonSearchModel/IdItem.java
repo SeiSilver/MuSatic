@@ -9,17 +9,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class VideoID {
+public class IdItem {
 
-    @SerializedName("videoId")
-    @Expose
     private String videoId;
-
-    public VideoID(String videoId) {
-        this.videoId = videoId;
-    }
-
-    public VideoID() {
-    }
 
 }

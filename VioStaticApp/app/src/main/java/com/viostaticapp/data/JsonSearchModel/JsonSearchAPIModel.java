@@ -3,15 +3,17 @@ package com.viostaticapp.data.JsonSearchModel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ItemYT {
+public class JsonSearchAPIModel {
 
-    private IdItem id;
+    private String nextPageToken;
 
-    private SnippetYT snippet;
+    private List<ItemYT> items;
 
 }

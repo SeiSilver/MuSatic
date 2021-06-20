@@ -53,19 +53,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData() {
 
-        String titleFormat = StringEscapeUtils.unescapeHtml4("&nbsp;asdasdasd adasd");
-
-        Log.e("ads", "asd");
-
-
 //        YoutubeAPISearch test = new YoutubeAPISearchImp();
-//        test.search("son tung");
-//        test.search("yoasobi");
-//        test.search("eve");
-//        test.search("relaxing music sleep");
-//        test.search("phe phim");
-//        test.search("phe game");
-//        test.search("english song");
+//        test.search("yoasobi song");
+//        test.search("hololive song");
+//        test.search("phim reviewer");
+//        test.search("vì sao lại phế");
+//        test.search("schannel");
+//        test.search("android studio");
 
     }
 

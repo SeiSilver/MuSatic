@@ -11,31 +11,42 @@ import lombok.Setter;
 @Setter
 public class ThumbnailYT {
 
+    @SerializedName("high")
+    private HighThumbnail highThumbnail;
+
     @SerializedName("medium")
-    @Expose
-    private HighThumbnail thumbnailHigh;
+    private MediumThumbnail mediumThumbnail;
 
-    public ThumbnailYT(HighThumbnail thumbnailHigh) {
-        this.thumbnailHigh = thumbnailHigh;
-    }
-
-    public ThumbnailYT() {
-    }
+    @SerializedName("default")
+    private DefaultThumbnail defaultThumbnail;
 
     @Getter
     @Setter
     public class HighThumbnail {
 
-        @SerializedName("url")
-        @Expose
         private String url;
+        public long width;
+        public long height;
 
-        public HighThumbnail(String url) {
-            this.url = url;
-        }
+    }
 
-        public HighThumbnail() {
-        }
+    @Getter
+    @Setter
+    public class DefaultThumbnail {
+
+        private String url;
+        public long width;
+        public long height;
+
+    }
+
+    @Getter
+    @Setter
+    public class MediumThumbnail {
+
+        private String url;
+        public long width;
+        public long height;
 
     }
 

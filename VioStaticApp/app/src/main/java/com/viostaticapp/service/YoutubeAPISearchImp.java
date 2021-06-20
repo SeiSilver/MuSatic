@@ -8,7 +8,7 @@ import com.viostaticapp.data.EnumInit;
 import com.viostaticapp.data.model.Channel;
 import com.viostaticapp.data.model.YoutubeVideo;
 import com.viostaticapp.data.JsonSearchModel.ItemYT;
-import com.viostaticapp.data.JsonSearchModel.JsonSearchModel;
+import com.viostaticapp.data.JsonSearchModel.JsonSearchAPIModel;
 
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -29,52 +29,55 @@ public class YoutubeAPISearchImp implements YoutubeAPISearch {
     private final String schema = "search?";
 
     private String part = "part=snippet";
-    private String maxResults = "&maxResults=50";
+    private String maxResults = "&maxResults=20";
     private String searchSchema = "&q=";
-    private String orderBy = "&order=date";
+    private String orderBy = "&order=relevance";
     private String key = "&key=" + APIKEY;
+    private String type = "&type=video";
 
     private FirebaseFirestore database = FirebaseFirestore.getInstance();
 
-    private YoutubeAPICall youtubeAPICall = null;
+    private IOnYoutubeAPI youtubeAPICall = null;
 
-    public YoutubeAPICall getYoutubeAPICall() {
+    public IOnYoutubeAPI getYoutubeAPICall() {
         if (youtubeAPICall == null) {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            youtubeAPICall = retrofit.create(YoutubeAPICall.class);
+            youtubeAPICall = retrofit.create(IOnYoutubeAPI.class);
         }
         return youtubeAPICall;
     }
-
-    private ArrayList<YoutubeVideo> videoList = new ArrayList<>();
 
     @Override
     public void search(String query) {
 
         ArrayList<ItemYT> modelList = new ArrayList<>();
 
-        String url_call = BASE_URL + schema + part + maxResults + searchSchema + query + orderBy + key;
+        String url_call = BASE_URL + schema +
+                part + maxResults +
+                searchSchema + query +
+                type +
+                orderBy + key;
 
-        Call<JsonSearchModel> data = getYoutubeAPICall().getYT(url_call);
+        Call<JsonSearchAPIModel> data = getYoutubeAPICall().getYoutubeResult(url_call);
 
-        data.enqueue(new Callback<JsonSearchModel>() {
+        data.enqueue(new Callback<JsonSearchAPIModel>() {
             @Override
-            public void onResponse(Call<JsonSearchModel> call, Response<JsonSearchModel> response) {
+            public void onResponse(Call<JsonSearchAPIModel> call, Response<JsonSearchAPIModel> response) {
 
                 if (response.errorBody() != null) {
                     Log.e("error", "onFailure" + response.errorBody());
                 } else {
-                    JsonSearchModel apiResponse = response.body();
+                    JsonSearchAPIModel apiResponse = response.body();
                     modelList.addAll(apiResponse.getItems());
-                    videoList = saveToDatabase(modelList);
+                    saveToDatabase(modelList);
                 }
             }
 
             @Override
-            public void onFailure(Call<JsonSearchModel> call, Throwable t) {
+            public void onFailure(Call<JsonSearchAPIModel> call, Throwable t) {
                 Log.e("error", "onFailure" + t);
 
             }
@@ -86,9 +89,6 @@ public class YoutubeAPISearchImp implements YoutubeAPISearch {
         ArrayList<YoutubeVideo> videos = new ArrayList<>();
 
         for (ItemYT i : itemYTList) {
-            if (i == null) {
-                continue;
-            }
 
             YoutubeVideo video = new YoutubeVideo();
             video.setId(i.getId().getVideoId());
@@ -96,40 +96,30 @@ public class YoutubeAPISearchImp implements YoutubeAPISearch {
             String titleFormat = StringEscapeUtils.unescapeHtml4(i.getSnippet().getTitle());
             video.setTitle(titleFormat);
 
-            video.setThumbnail(i.getSnippet().getThumbnail().getThumbnailHigh().getUrl());
+            video.setThumbnail(i.getSnippet().getThumbnails().getDefaultThumbnail().getUrl());
             Channel c = new Channel();
             c.setChannelId(i.getSnippet().getChannelId());
 
             String channelTitleFormat = StringEscapeUtils.unescapeHtml4(i.getSnippet().getChannelTitle());
             c.setChannelTitle(channelTitleFormat);
-
             video.setChannel(c);
 
             video.setPublishedAt(i.getSnippet().getPublishedAt());
-
             video.setVideoUrl("https://www.youtube.com/watch?v=" + i.getId().getVideoId());
-
+            video.setDescription(i.getSnippet().getDescription());
             videos.add(video);
-        }
 
-        //Save to Database
-
-        for (YoutubeVideo i : videos) {
-            if (i == null || i.getId() == null) {
-                continue;
-            }
-
-            database.collection(EnumInit.Table.YoutubeVideo.name).document(i.getId()).set(i);
-            Log.e("database", "Video: " + i.getTitle());
-
+            //Save to Database
+            database.collection(EnumInit.Table.YoutubeVideo.name).document(video.getId()).set(video);
+//            Log.e("database", "Video: " + video.getTitle());
         }
 
         return videos;
     }
 
-    interface YoutubeAPICall {
+    public interface IOnYoutubeAPI {
         @GET
-        Call<JsonSearchModel> getYT(@Url String url);
+        Call<JsonSearchAPIModel> getYoutubeResult(@Url String url);
     }
 
 }
