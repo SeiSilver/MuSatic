@@ -1,6 +1,7 @@
 package com.viostaticapp.present.homePresent;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.viostaticapp.R;
 import com.viostaticapp.data.model.YoutubeVideo;
+import com.viostaticapp.view.YoutubePlayerActivity;
 
 import java.util.List;
 
@@ -44,6 +46,15 @@ public class HomeLatestAdapter extends RecyclerView.Adapter<HomeLatestAdapter.Cu
 
         holder.textView.setText(videoList.get(position).getTitle());
         holder.textView.setSelected(true);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, YoutubePlayerActivity.class);
+                intent.putExtra("youtubeVideo", videoList.get(position));
+                context.startActivity(intent);
+            }
+        });
 
     }
 
