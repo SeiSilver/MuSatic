@@ -17,6 +17,7 @@
     <color name="iconHighLight">#FF37aa9c</color>
     <color name="iconHighLightSoft">#FF94f3e4</color>
 
+    <color name="red">#FF0000</color>
 
 
 </resources>
