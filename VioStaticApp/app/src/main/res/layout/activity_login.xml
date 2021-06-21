@@ -87,7 +87,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edt_login_email" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_login"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -111,7 +111,8 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/register_btn"
+        android:id="@+id/btn_register"
+        android:onClick="redirectToSignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
