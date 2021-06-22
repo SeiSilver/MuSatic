@@ -1,5 +1,6 @@
 package com.viostaticapp.present.homePresent;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -15,8 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.viostaticapp.R;
 import com.viostaticapp.data.model.YoutubeVideo;
+import com.viostaticapp.present._common.BaseOnClickedEvent;
 import com.viostaticapp.view.YoutubePlayerActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeLatestAdapter extends RecyclerView.Adapter<HomeLatestAdapter.CustomViewHolder> {
@@ -53,6 +56,7 @@ public class HomeLatestAdapter extends RecyclerView.Adapter<HomeLatestAdapter.Cu
                 Intent intent = new Intent(context, YoutubePlayerActivity.class);
                 intent.putExtra("youtubeVideo", videoList.get(position));
                 context.startActivity(intent);
+                ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 

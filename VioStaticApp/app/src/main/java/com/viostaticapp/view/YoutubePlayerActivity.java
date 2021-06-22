@@ -2,6 +2,7 @@ package com.viostaticapp.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -76,6 +77,8 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
             }
         });
 
@@ -84,6 +87,6 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e("destroy","is destroy");
+        Log.e("destroy", "is destroy");
     }
 }

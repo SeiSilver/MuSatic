@@ -34,7 +34,7 @@ public class SearchFragment extends Fragment {
     FirebaseFirestore database = FirebaseFirestore.getInstance();
     SearchAdapter searchAdapter;
     RecyclerView search_page_recycler;
-    ArrayList<YoutubeVideo> videoList = new ArrayList<>();
+    static ArrayList<YoutubeVideo> videoList = new ArrayList<>();
     SearchView searchView;
 
     @Override

@@ -1,5 +1,6 @@
 package com.viostaticapp.present.homePresent;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -54,6 +55,8 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<HomeRecommendAdap
                 Intent intent = new Intent(context, YoutubePlayerActivity.class);
                 intent.putExtra("youtubeVideo", videoList.get(position));
                 context.startActivity(intent);
+                ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
             }
         });
 
