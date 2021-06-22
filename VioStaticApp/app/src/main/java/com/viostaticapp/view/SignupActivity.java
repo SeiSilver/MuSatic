@@ -93,6 +93,9 @@ public class SignupActivity extends AppCompatActivity {
             public void onSuccess(AuthResult authResult) {
                 progressDialog.setMessage("Saving...");
                 Map<String, Object> dataMap = new HashMap<>();
+                dataMap.put("email", sEmail);
+                dataMap.put("password", sPassword);
+
                 db.collection("Accounts").add(dataMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
