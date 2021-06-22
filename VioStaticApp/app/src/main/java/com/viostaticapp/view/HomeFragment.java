@@ -40,10 +40,12 @@ public class HomeFragment extends Fragment {
     HomeRecommendAdapter homeRecommendAdapter;
     FirebaseFirestore database = FirebaseFirestore.getInstance();
 
-    List<YoutubeVideo> latestVideoList = new ArrayList<>();
-    List<YoutubeVideo> recommendVideoList = new ArrayList<>();
+    static List<YoutubeVideo> latestVideoList = new ArrayList<>();
+    static List<YoutubeVideo> recommendVideoList = new ArrayList<>();
 
     ProgressDialog dialog;
+
+    int stt = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,9 +59,11 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         dialog = new ProgressDialog(getContext());
-        dialog.setTitle("Notification");
         dialog.setMessage("Getting data");
-        dialog.show();
+
+        if (latestVideoList.isEmpty() || recommendVideoList.isEmpty()) {
+            dialog.show();
+        }
 
         setHomeLatestRecycler();
         setHomeRecommendRecycler();
@@ -113,7 +117,11 @@ public class HomeFragment extends Fragment {
                             latestVideoList.add(video);
                         }
                         homeLatestAdapter.notifyDataSetChanged();
-                        dialog.dismiss();
+
+                        if (++stt >= 2) {
+                            dialog.dismiss();
+                        }
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -148,6 +156,10 @@ public class HomeFragment extends Fragment {
                         }
                         homeRecommendAdapter.notifyDataSetChanged();
                         dialog.dismiss();
+
+                        if (++stt >= 2) {
+                            dialog.dismiss();
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
