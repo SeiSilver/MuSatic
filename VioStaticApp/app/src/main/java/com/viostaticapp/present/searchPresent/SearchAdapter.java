@@ -1,5 +1,6 @@
 package com.viostaticapp.present.searchPresent;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -50,6 +51,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.CustomView
                 Intent intent = new Intent(context, YoutubePlayerActivity.class);
                 intent.putExtra("youtubeVideo", videoList.get(position));
                 context.startActivity(intent);
+                ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
             }
         });
 
