@@ -29,9 +29,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/latest_row_recycler"
-                android:overScrollMode="never"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:overScrollMode="never" />
 
             <TextView
                 android:id="@+id/recommend_title"
@@ -47,9 +47,11 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recommend_row_recycler"
-                android:overScrollMode="never"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:layout_marginBottom="10dp"
+                />
 
         </LinearLayout>
 

@@ -110,7 +110,7 @@ public class YoutubeAPISearchImp implements YoutubeAPISearch {
             videos.add(video);
 
             //Save to Database
-            database.collection(EnumInit.Table.YoutubeVideo.name).document(video.getId()).set(video);
+            database.collection(EnumInit.Collections.YoutubeVideo.name).document(video.getId()).set(video);
 //            Log.e("database", "Video: " + video.getTitle());
         }
 

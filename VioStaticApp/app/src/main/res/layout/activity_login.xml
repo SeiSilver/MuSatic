@@ -7,6 +7,16 @@
     android:background="@drawable/background"
     tools:context=".view.LoginActivity">
 
+    <ImageView
+        android:id="@+id/login_back_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:onClick="backToPrevious"
+        android:src="@drawable/ic_back_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/title_welcome"
         android:layout_width="wrap_content"
@@ -19,6 +29,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/opensans_bold"
             android:text="WELCOME!"
             android:textSize="50dp" />
@@ -88,12 +99,12 @@
 
     <Button
         android:id="@+id/btn_login"
-        android:onClick="login"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/iconHighLight"
+        android:onClick="login"
         android:text="Login"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edt_login_password" />
@@ -113,12 +124,12 @@
 
     <TextView
         android:id="@+id/btn_register"
-        android:onClick="redirectToSignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginBottom="10dp"
         android:fontFamily="@font/opensans_bold"
+        android:onClick="redirectToSignup"
         android:text="Register"
         android:textColor="@color/teal_700"
         android:textSize="18dp"

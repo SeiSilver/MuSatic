@@ -35,18 +35,31 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/test1" />
+                    android:src="@drawable/ic_profile" />
 
 
             </androidx.cardview.widget.CardView>
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/profile_login_btn"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:text="LOGIN"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintCircleRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cardView2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/profile_tv_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="280dp"
+                android:text="Your name"
+                android:textSize="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cardView2"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -61,10 +74,9 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardCornerRadius="25dp"
             android:layout_margin="25dp"
             android:backgroundTint="@color/navbarColor"
-            >
+            app:cardCornerRadius="25dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -78,14 +90,14 @@
                     android:layout_marginTop="25dp"
                     android:layout_marginEnd="25dp"
                     android:text="Account"
-                    android:textSize="40dp" />
+                    android:textSize="25dp" />
 
                 <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="25dp"
                     android:layout_marginEnd="25dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
                     android:background="#FFFFFF" />
 
                 <TextView
@@ -95,26 +107,26 @@
                     android:layout_marginTop="25dp"
                     android:layout_marginEnd="25dp"
                     android:text="Setting"
-                    android:textSize="40dp" />
+                    android:textSize="25dp" />
 
                 <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="25dp"
                     android:layout_marginEnd="25dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
                     android:background="#FFFFFF" />
 
                 <TextView
-                    android:id="@+id/tv_logout"
+                    android:id="@+id/profile_logout_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="25dp"
                     android:layout_marginEnd="25dp"
-                    android:textColor="#FF6969"
                     android:text="Logout"
-                    android:textSize="40dp" />
+                    android:textColor="#FF6969"
+                    android:textSize="25dp" />
 
             </LinearLayout>
 

@@ -24,13 +24,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.viostaticapp.R;
 
 public class LoginActivity extends AppCompatActivity {
-    private Context context;
 
     ProgressDialog progressDialog;
-
     FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
-
     EditText edtEmail, edtPassword;
 
     @Override
@@ -38,19 +35,19 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        context = this;
-
-        progressDialog = new ProgressDialog(context);
+        progressDialog = new ProgressDialog(this);
 
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
         edtEmail = findViewById(R.id.edt_login_email);
-        edtPassword=findViewById(R.id.edt_login_password);
+        edtPassword = findViewById(R.id.edt_login_password);
     }
 
-    public void login(View view){
-        progressDialog.setTitle("Please wait...");
+    // onClickEvent
+    public void login(View view) {
+
+        progressDialog.setMessage("Please wait...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
@@ -58,46 +55,56 @@ public class LoginActivity extends AppCompatActivity {
         String sEmail = edtEmail.getText().toString().trim();
         String sPassword = edtPassword.getText().toString().trim();
 
-        if(sEmail.isEmpty())
+        if (sEmail.isEmpty()) {
+
             createAlert("Error", "Please enter your email!", "OK");
-        else if(!Patterns.EMAIL_ADDRESS.matcher(sEmail).matches())
+            progressDialog.dismiss();
+
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(sEmail).matches()) {
+
             createAlert("Error", "Please enter a valid email!", "OK");
-        else if(sPassword.isEmpty())
+            progressDialog.dismiss();
+
+        } else if (sPassword.isEmpty()) {
+
             createAlert("Error", "Please enter your password!", "OK");
-        else{
+            progressDialog.dismiss();
+
+        } else {
             firebaseAuth.signInWithEmailAndPassword(sEmail, sPassword).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                 @Override
                 public void onSuccess(AuthResult authResult) {
                     progressDialog.dismiss();
                     FirebaseUser user = authResult.getUser();
                     startMainActivity(user);
+                    Toast.makeText(getApplicationContext(), "Login Success at " + user.getEmail(), Toast.LENGTH_SHORT).show();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     progressDialog.dismiss();
-                    if (e instanceof FirebaseAuthInvalidUserException){
+                    if (e instanceof FirebaseAuthInvalidUserException) {
                         createAlert("Error", "This email is not registered with us!", "OK");
-                    }else if(e instanceof FirebaseAuthInvalidCredentialsException){
+                    } else if (e instanceof FirebaseAuthInvalidCredentialsException) {
                         createAlert("Error", "Invalid Password! Please try again.", "OK");
-                    }else{
-                        Toast.makeText(context, "Unable to login! Please try after some time.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Unable to login! Please try after some time.", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
             });
         }
+
     }
-    private void startMainActivity(FirebaseUser user){
-        if (user != null){
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+
+    private void startMainActivity(FirebaseUser user) {
+        if (user != null) {
             finish();
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
     }
 
-    private void createAlert(String alertTitle, String alertMessage, String positiveText){
+    private void createAlert(String alertTitle, String alertMessage, String positiveText) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(alertTitle)
                 .setMessage(alertMessage)
@@ -105,11 +112,16 @@ public class LoginActivity extends AppCompatActivity {
                 .create().show();
     }
 
-    public void redirectToSignup(View view){
+    // onClickEvent
+    public void redirectToSignup(View view) {
         Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
 
-        //Close login activity
+    // onClickEvent
+    public void backToPrevious(View view) {
         finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

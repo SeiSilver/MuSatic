@@ -7,6 +7,16 @@
     android:background="@drawable/background"
     tools:context=".view.SignupActivity">
 
+    <ImageView
+        android:id="@+id/signup_back_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:onClick="redirectLogin"
+        android:src="@drawable/ic_back_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,14 +70,14 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:background="@drawable/border_input"
-        android:ems="10"
         android:backgroundTint="@color/white"
-        android:textColorHint="@color/black"
-        android:textColor="@color/black"
+        android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:paddingHorizontal="10dp"
         android:paddingVertical="5dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/gl_signup_45"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -76,16 +86,16 @@
         android:id="@+id/edt_signup_password"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:background="@drawable/border_input"
+        android:backgroundTint="@color/white"
         android:ems="10"
         android:hint="Password"
-        android:backgroundTint="@color/white"
-        android:textColorHint="@color/black"
-        android:textColor="@color/black"
         android:inputType="textPassword"
-        android:layout_marginTop="5dp"
         android:paddingHorizontal="10dp"
         android:paddingVertical="5dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/gl_signup_45" />
@@ -96,24 +106,24 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:background="@drawable/border_input"
+        android:backgroundTint="@color/white"
         android:ems="10"
         android:hint="Retype Password"
-        android:backgroundTint="@color/white"
-        android:textColorHint="@color/black"
-        android:textColor="@color/black"
         android:inputType="textPassword"
         android:paddingHorizontal="10dp"
         android:paddingVertical="5dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
         app:layout_constraintBottom_toTopOf="@id/gl_signup_60"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_signup"
-        android:onClick="signup"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:onClick="signup"
         android:text="Signup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -134,15 +144,15 @@
 
     <TextView
         android:id="@+id/btn_backToLogin"
-        android:onClick="redirectLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:layout_marginBottom="10dp"
         android:fontFamily="@font/opensans_bold"
+        android:onClick="redirectLogin"
         android:text="Login now"
         android:textColor="@color/teal_700"
         android:textSize="18dp"
-        android:layout_marginStart="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView" />
 
