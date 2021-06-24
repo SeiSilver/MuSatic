@@ -1,17 +1,15 @@
 package com.viostaticapp.data;
 
-import java.util.Random;
-
 public class EnumInit {
 
-    public enum Table {
+    public enum Collections {
 
         YoutubeVideo("YoutubeVideo"),
         User("User");
 
         public String name;
 
-        Table(String name) {
+        Collections(String name) {
             this.name = name;
         }
 

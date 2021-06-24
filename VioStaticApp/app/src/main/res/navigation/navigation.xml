@@ -30,5 +30,15 @@
         android:name="com.viostaticapp.view.YoutubePlayerActivity"
         android:label="activity_youtube_player"
         tools:layout="@layout/activity_youtube_player" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.viostaticapp.view.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+    <activity
+        android:id="@+id/signupActivity"
+        android:name="com.viostaticapp.view.SignupActivity"
+        android:label="activity_signup"
+        tools:layout="@layout/activity_signup" />
 
 </navigation>

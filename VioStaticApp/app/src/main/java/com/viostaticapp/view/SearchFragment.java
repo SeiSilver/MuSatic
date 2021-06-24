@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,7 +23,6 @@ import com.viostaticapp.R;
 import com.viostaticapp.data.EnumInit;
 import com.viostaticapp.data.model.Channel;
 import com.viostaticapp.data.model.YoutubeVideo;
-import com.viostaticapp.present.homePresent.HomeRecommendAdapter;
 import com.viostaticapp.present.searchPresent.SearchAdapter;
 
 import java.util.ArrayList;
@@ -66,7 +64,7 @@ public class SearchFragment extends Fragment {
         searchAdapter = new SearchAdapter(getContext(), videoList);
         search_page_recycler.setAdapter(searchAdapter);
 
-        database.collection(EnumInit.Table.YoutubeVideo.name)
+        database.collection(EnumInit.Collections.YoutubeVideo.name)
                 .orderBy("title")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -113,7 +111,7 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                database.collection(EnumInit.Table.YoutubeVideo.name)
+                database.collection(EnumInit.Collections.YoutubeVideo.name)
                         .whereGreaterThanOrEqualTo("title", query)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

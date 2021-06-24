@@ -95,7 +95,7 @@ public class HomeFragment extends Fragment {
 
     private void setDataForList() {
 
-        database.collection(EnumInit.Table.YoutubeVideo.name)
+        database.collection(EnumInit.Collections.YoutubeVideo.name)
                 .orderBy("publishedAt", Query.Direction.DESCENDING)
                 .limit(10)
                 .get()
@@ -133,7 +133,7 @@ public class HomeFragment extends Fragment {
 
         // set list for
 
-        database.collection(EnumInit.Table.YoutubeVideo.name)
+        database.collection(EnumInit.Collections.YoutubeVideo.name)
                 .orderBy("title")
                 .limitToLast(10)
                 .get()
