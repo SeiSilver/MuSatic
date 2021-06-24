@@ -83,6 +83,7 @@
         android:textColorHint="@color/black"
         android:textColor="@color/black"
         android:inputType="textPassword"
+        android:layout_marginTop="5dp"
         android:paddingHorizontal="10dp"
         android:paddingVertical="5dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,7 +109,8 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_signup"
+        android:onClick="signup"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -131,12 +133,13 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/go_back_to_login_btn"
+        android:id="@+id/btn_backToLogin"
+        android:onClick="redirectLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:fontFamily="@font/opensans_bold"
-        android:text="Join us"
+        android:text="Login now"
         android:textColor="@color/teal_700"
         android:textSize="18dp"
         android:layout_marginStart="5dp"
