@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".view.YoutubePlayerActivity">
 
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -52,10 +53,7 @@
             <com.google.android.youtube.player.YouTubePlayerView
                 android:id="@+id/youtube_player_view"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="250dp" />
 
             <TextView
                 android:id="@+id/player_video_title"
@@ -103,21 +101,24 @@
                 android:layout_height="match_parent"
                 android:layout_margin="16dp"
                 android:text="Description Content"
-                android:textSize="16dp"
-                />
+                android:textSize="16dp" />
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/showPlayerOption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_add"
-        app:backgroundTint="@color/iconHighLight"
+        android:layout_margin="10dp"
+        android:onClick="showPlayerOptionMenu"
+        android:src="@drawable/ic_baseline_playlist"
+        app:backgroundTint="#4672BD"
         app:fabCustomSize="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="30dp"
+        app:tint="#FFFFFF" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
