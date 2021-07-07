@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private NavController navController;
     private Toolbar toolbar;
-    private BroadCardReceiver receiver;
+//    private BroadCardReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +49,17 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        receiver = new BroadCardReceiver();
-        registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+//        receiver = new BroadCardReceiver();
+//        registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         initData();
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(receiver);
+//        unregisterReceiver(receiver);
     }
 
     @Override

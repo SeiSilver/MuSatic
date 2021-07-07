@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/addPlaylist"
+        android:icon="@drawable/ic_playlist_add"
+        android:title="Add to Library"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/deletePlaylist"
+        android:icon="@drawable/ic_playlist_remove"
+        android:title="Remove from Library"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/openYoutube"
+        android:icon="@drawable/ic_youtube_video"
+        android:title="Open with Youtube"
+        app:showAsAction="never" />
+
+
+</menu>
