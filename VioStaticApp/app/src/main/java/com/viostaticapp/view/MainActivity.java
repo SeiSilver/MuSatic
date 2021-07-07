@@ -1,13 +1,8 @@
 package com.viostaticapp.view;
 
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.util.Log;
 import android.view.Menu;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,11 +13,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.viostaticapp.R;
-import com.viostaticapp.service.BroadCardReceiver;
-import com.viostaticapp.service.YoutubeAPISearch;
-import com.viostaticapp.service.YoutubeAPISearchImp;
-
-import org.apache.commons.text.StringEscapeUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData() {
 
-//        YoutubeAPISearch test = new YoutubeAPISearchImp();
+//        YoutubeAPISearch test = new YoutubeAPISearch();
 //        test.search("yoasobi song");
 //        test.search("hololive song");
 //        test.search("phim reviewer");
