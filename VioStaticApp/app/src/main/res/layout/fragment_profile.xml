@@ -12,8 +12,10 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -72,10 +74,11 @@
             android:background="#FFFFFF" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cv_accountSetting"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="25dp"
-            android:backgroundTint="@color/navbarColor"
+            app:cardBackgroundColor="@color/navbarColor"
             app:cardCornerRadius="25dp">
 
             <LinearLayout
@@ -89,32 +92,190 @@
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="25dp"
                     android:layout_marginEnd="25dp"
-                    android:text="Account"
+                    android:text="Account Setting"
                     android:textSize="25dp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginStart="25dp"
                     android:layout_marginTop="25dp"
-                    android:layout_marginEnd="25dp"
                     android:background="#FFFFFF" />
 
-                <TextView
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_changeUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginEnd="25dp"
-                    android:text="Setting"
-                    android:textSize="25dp" />
+                    android:backgroundTint="@color/navbarColor">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="25dp">
+
+                        <TextView
+                            android:id="@+id/tv_changeUsername"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="25dp"
+                            android:layout_marginTop="25dp"
+                            android:layout_marginEnd="25dp"
+                            android:text="Change username"
+                            android:textSize="25dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/iv_changeUsername_arrowIcon"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_marginTop="25dp"
+                            android:layout_marginEnd="25dp"
+                            android:src="@drawable/ic_baseline_keyboard_arrow_down_36"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/lo_changeUsernameExpand"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toBottomOf="@id/tv_changeUsername">
+
+                            <EditText
+                                android:id="@+id/edt_changeUsername_newUsername"
+                                android:layout_width="270dp"
+                                android:layout_height="50dp"
+                                android:layout_marginStart="25dp"
+                                android:layout_marginTop="15dp"
+                                android:background="@drawable/border_input"
+                                android:hint="New username"
+                                android:inputType="text"
+                                android:textSize="22dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/iv_saveUsername"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="25dp"
+                                android:layout_marginBottom="8dp"
+                                android:src="@drawable/ic_baseline_save_36"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </androidx.cardview.widget.CardView>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#FFFFFF" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_changePassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/navbarColor">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="25dp">
+
+                        <TextView
+                            android:id="@+id/tv_changePassword"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="25dp"
+                            android:layout_marginTop="25dp"
+                            android:layout_marginEnd="25dp"
+                            android:text="Change password"
+                            android:textSize="25dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/iv_changePassword_arrowIcon"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_marginTop="25dp"
+                            android:layout_marginEnd="25dp"
+                            android:src="@drawable/ic_baseline_keyboard_arrow_down_36"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/lo_changePasswordExpand"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toBottomOf="@id/tv_changePassword">
+
+                            <EditText
+                                android:id="@+id/edt_changePassword_newPassword"
+                                android:layout_width="270dp"
+                                android:layout_height="50dp"
+                                android:layout_marginStart="25dp"
+                                android:layout_marginTop="15dp"
+                                android:background="@drawable/border_input"
+                                android:hint="New Password"
+                                android:inputType="textPassword"
+                                android:textSize="22dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/iv_changePassword_show"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="22dp"
+                                android:layout_marginEnd="25dp"
+                                android:src="@drawable/ic_eye_36"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <EditText
+                                android:id="@+id/edt_changePassword_retypePassword"
+                                android:layout_width="270dp"
+                                android:layout_height="50dp"
+                                android:layout_marginStart="25dp"
+                                android:layout_marginTop="15dp"
+                                android:background="@drawable/border_input"
+                                android:hint="Retype Password"
+                                android:inputType="textPassword"
+                                android:textSize="22dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/edt_changePassword_newPassword" />
+
+                            <ImageView
+                                android:id="@+id/iv_changePassword_save"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="25dp"
+                                android:layout_marginBottom="8dp"
+                                android:src="@drawable/ic_baseline_save_36"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginEnd="25dp"
                     android:background="#FFFFFF" />
 
                 <TextView
