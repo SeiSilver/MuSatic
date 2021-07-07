@@ -4,6 +4,6 @@ import java.util.ArrayList;
 
 public interface BaseOnClickedEvent {
 
-    void onClicked(int value);
+    void onClicked(int position);
 
 }

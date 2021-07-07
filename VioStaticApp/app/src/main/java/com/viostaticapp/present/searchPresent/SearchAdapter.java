@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.viostaticapp.R;
 import com.viostaticapp.data.model.YoutubeVideo;
+import com.viostaticapp.present._common.BaseOnClickedEvent;
 import com.viostaticapp.view.YoutubePlayerActivity;
 
 import java.util.List;
