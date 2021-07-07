@@ -1,5 +1,7 @@
 package com.viostaticapp.view;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,18 +24,29 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.viostaticapp.R;
 import com.viostaticapp.data.EnumInit;
+import com.viostaticapp.data.JsonSearchModel.ItemYT;
+import com.viostaticapp.data.JsonSearchModel.JsonSearchAPIModel;
 import com.viostaticapp.data.model.Channel;
 import com.viostaticapp.data.model.YoutubeVideo;
+import com.viostaticapp.present._common.VideoItemClickedEvent;
 import com.viostaticapp.present.searchPresent.SearchAdapter;
+import com.viostaticapp.service.SaveDataService;
+import com.viostaticapp.service.YoutubeAPISearch;
+
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.ArrayList;
 
-public class SearchFragment extends Fragment {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class SearchFragment extends Fragment implements VideoItemClickedEvent {
 
     FirebaseFirestore database = FirebaseFirestore.getInstance();
     SearchAdapter searchAdapter;
     RecyclerView search_page_recycler;
-    static ArrayList<YoutubeVideo> videoList = new ArrayList<>();
+    public static ArrayList<YoutubeVideo> videoList = new ArrayList<>();
     SearchView searchView;
 
     @Override
@@ -61,7 +75,7 @@ public class SearchFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 RecyclerView.VERTICAL, false);
         search_page_recycler.setLayoutManager(layoutManager);
-        searchAdapter = new SearchAdapter(getContext(), videoList);
+        searchAdapter = new SearchAdapter(getContext(), videoList, this::onClicked);
         search_page_recycler.setAdapter(searchAdapter);
 
         database.collection(EnumInit.Collections.YoutubeVideo.name)
@@ -84,6 +98,7 @@ public class SearchFragment extends Fragment {
                             videoList.add(video);
                         }
                         searchAdapter.notifyDataSetChanged();
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -111,33 +126,35 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                database.collection(EnumInit.Collections.YoutubeVideo.name)
-                        .whereGreaterThanOrEqualTo("title", query)
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                videoList.clear();
-                                for (DocumentSnapshot doc : task.getResult()) {
-                                    YoutubeVideo video = new YoutubeVideo();
+                searchProcess(query);
 
-                                    video.setId(doc.getString("id"));
-                                    video.setTitle(doc.getString("title"));
-                                    video.setVideoUrl(doc.getString("videoUrl"));
-                                    video.setPublishedAt(doc.getString("publishedAt"));
-                                    video.setChannel(doc.get("channel", Channel.class));
-                                    video.setThumbnail(doc.getString("thumbnail"));
-                                    videoList.add(video);
-                                }
-                                searchAdapter.notifyDataSetChanged();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });
+//                database.collection(EnumInit.Collections.YoutubeVideo.name)
+//                        .whereGreaterThanOrEqualTo("title", query)
+//                        .get()
+//                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                videoList.clear();
+//                                for (DocumentSnapshot doc : task.getResult()) {
+//                                    YoutubeVideo video = new YoutubeVideo();
+//
+//                                    video.setId(doc.getString("id"));
+//                                    video.setTitle(doc.getString("title"));
+//                                    video.setVideoUrl(doc.getString("videoUrl"));
+//                                    video.setPublishedAt(doc.getString("publishedAt"));
+//                                    video.setChannel(doc.get("channel", Channel.class));
+//                                    video.setThumbnail(doc.getString("thumbnail"));
+//                                    videoList.add(video);
+//                                }
+//                                searchAdapter.notifyDataSetChanged();
+//                            }
+//                        })
+//                        .addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//
+//                            }
+//                        });
 
                 return false;
             }
@@ -149,4 +166,79 @@ public class SearchFragment extends Fragment {
         });
 
     }
+
+    private void searchProcess(String query) {
+
+        ArrayList<ItemYT> modelList = new ArrayList<>();
+
+        String url_call = YoutubeAPISearch.BASE_URL + YoutubeAPISearch.schema +
+                YoutubeAPISearch.part + YoutubeAPISearch.maxResults +
+                YoutubeAPISearch.searchSchema + query +
+                YoutubeAPISearch.type +
+                YoutubeAPISearch.orderBy + YoutubeAPISearch.key;
+
+        YoutubeAPISearch.IOnYoutubeAPI youtubeAPI = YoutubeAPISearch.getYoutubeAPICall();
+        Call<JsonSearchAPIModel> data = youtubeAPI.getYoutubeResult(url_call);
+
+        data.enqueue(new Callback<JsonSearchAPIModel>() {
+            @Override
+            public void onResponse(Call<JsonSearchAPIModel> call, Response<JsonSearchAPIModel> response) {
+
+                if (response.errorBody() != null) {
+                    Log.e("error", "onFailure" + response.errorBody());
+                } else {
+                    JsonSearchAPIModel apiResponse = response.body();
+                    modelList.addAll(apiResponse.getItems());
+
+                    ArrayList<YoutubeVideo> videos = new ArrayList<>();
+
+                    videoList.clear();
+
+                    for (ItemYT i : modelList) {
+
+                        YoutubeVideo video = new YoutubeVideo();
+                        video.setId(i.getId().getVideoId());
+
+                        String titleFormat = StringEscapeUtils.unescapeHtml4(i.getSnippet().getTitle());
+                        video.setTitle(titleFormat);
+
+                        video.setThumbnail(i.getSnippet().getThumbnails().getDefaultThumbnail().getUrl());
+                        Channel c = new Channel();
+                        c.setChannelId(i.getSnippet().getChannelId());
+
+                        String channelTitleFormat = StringEscapeUtils.unescapeHtml4(i.getSnippet().getChannelTitle());
+                        c.setChannelTitle(channelTitleFormat);
+                        video.setChannel(c);
+
+                        video.setPublishedAt(i.getSnippet().getPublishedAt());
+                        video.setVideoUrl("https://www.youtube.com/watch?v=" + i.getId().getVideoId());
+                        video.setDescription(i.getSnippet().getDescription());
+                        videos.add(video);
+
+                    }
+
+                    videoList.addAll(videos);
+                    searchAdapter.notifyDataSetChanged();
+
+                    Intent intent = new Intent(getContext(), SaveDataService.class);
+                    getContext().startService(intent);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonSearchAPIModel> call, Throwable t) {
+                Log.e("error", "onFailure" + t);
+            }
+        });
+    }
+
+    @Override
+    public void onClicked(YoutubeVideo video) {
+        Intent intent = new Intent(getContext(), YoutubePlayerActivity.class);
+        intent.putExtra("youtubeVideo", video);
+        getContext().startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
 }

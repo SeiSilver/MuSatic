@@ -33,6 +33,7 @@ import com.viostaticapp.present.homePresent.HomeRecommendAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class HomeFragment extends Fragment implements VideoItemClickedEvent {
 
@@ -98,6 +99,8 @@ public class HomeFragment extends Fragment implements VideoItemClickedEvent {
 
     private void setDataForList() {
 
+        Random random = new Random();
+
         database.collection(EnumInit.Collections.YoutubeVideo.name)
                 .orderBy("publishedAt", Query.Direction.DESCENDING)
                 .limit(10)
@@ -138,15 +141,18 @@ public class HomeFragment extends Fragment implements VideoItemClickedEvent {
 
         database.collection(EnumInit.Collections.YoutubeVideo.name)
                 .orderBy("title")
-                .limitToLast(10)
+                .limit(50)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for (DocumentSnapshot doc : task.getResult()) {
 
-                            YoutubeVideo video = new YoutubeVideo();
+                            if (random.nextBoolean()) {
+                                continue;
+                            }
 
+                            YoutubeVideo video = new YoutubeVideo();
                             video.setId(doc.getString("id"));
                             video.setTitle(doc.getString("title"));
                             video.setVideoUrl(doc.getString("videoUrl"));
@@ -158,8 +164,6 @@ public class HomeFragment extends Fragment implements VideoItemClickedEvent {
                             recommendVideoList.add(video);
                         }
                         homeRecommendAdapter.notifyDataSetChanged();
-                        dialog.dismiss();
-
                         if (++stt >= 2) {
                             dialog.dismiss();
                         }
