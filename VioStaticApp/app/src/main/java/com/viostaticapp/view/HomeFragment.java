@@ -1,6 +1,8 @@
 package com.viostaticapp.view;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,14 +26,15 @@ import com.viostaticapp.R;
 import com.viostaticapp.data.EnumInit;
 import com.viostaticapp.data.model.Channel;
 import com.viostaticapp.data.model.YoutubeVideo;
+import com.viostaticapp.present._common.BaseOnClickedEvent;
+import com.viostaticapp.present._common.VideoItemClickedEvent;
 import com.viostaticapp.present.homePresent.HomeLatestAdapter;
 import com.viostaticapp.present.homePresent.HomeRecommendAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements VideoItemClickedEvent {
 
     RecyclerView homeLatestRecycler;
     RecyclerView homeRecommendRecycler;
@@ -77,7 +80,7 @@ public class HomeFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 RecyclerView.HORIZONTAL, false);
         homeLatestRecycler.setLayoutManager(layoutManager);
-        homeLatestAdapter = new HomeLatestAdapter(getContext(), latestVideoList);
+        homeLatestAdapter = new HomeLatestAdapter(getContext(), latestVideoList, this::onClicked);
         homeLatestRecycler.setAdapter(homeLatestAdapter);
 
     }
@@ -88,7 +91,7 @@ public class HomeFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 RecyclerView.VERTICAL, false);
         homeRecommendRecycler.setLayoutManager(layoutManager);
-        homeRecommendAdapter = new HomeRecommendAdapter(getContext(), recommendVideoList);
+        homeRecommendAdapter = new HomeRecommendAdapter(getContext(), recommendVideoList, this::onClicked);
         homeRecommendRecycler.setAdapter(homeRecommendAdapter);
 
     }
@@ -171,4 +174,13 @@ public class HomeFragment extends Fragment {
 
     }
 
+    @Override
+    public void onClicked(YoutubeVideo video) {
+
+        Intent intent = new Intent(getContext(), YoutubePlayerActivity.class);
+        intent.putExtra("youtubeVideo", video);
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+    }
 }

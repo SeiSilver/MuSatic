@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.viostaticapp.R;
 import com.viostaticapp.data.model.YoutubeVideo;
+import com.viostaticapp.present._common.BaseOnClickedEvent;
+import com.viostaticapp.present._common.VideoItemClickedEvent;
 import com.viostaticapp.view.YoutubePlayerActivity;
 
 import java.util.List;
@@ -23,10 +25,14 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<HomeRecommendAdap
 
     private Context context;
     private List<YoutubeVideo> videoList;
+    private VideoItemClickedEvent videoItemClickedEvent;
 
-    public HomeRecommendAdapter(Context context, List<YoutubeVideo> videoList) {
+
+    public HomeRecommendAdapter(Context context, List<YoutubeVideo> videoList, VideoItemClickedEvent videoItemClickedEvent) {
         this.context = context;
         this.videoList = videoList;
+        this.videoItemClickedEvent = videoItemClickedEvent;
+
     }
 
     @NonNull
@@ -52,10 +58,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<HomeRecommendAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, YoutubePlayerActivity.class);
-                intent.putExtra("youtubeVideo", videoList.get(position));
-                context.startActivity(intent);
-                ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                videoItemClickedEvent.onClicked(videoList.get(position));
 
             }
         });
