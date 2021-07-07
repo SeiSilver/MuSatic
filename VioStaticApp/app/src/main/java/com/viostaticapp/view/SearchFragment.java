@@ -125,37 +125,7 @@ public class SearchFragment extends Fragment implements VideoItemClickedEvent {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
                 searchProcess(query);
-
-//                database.collection(EnumInit.Collections.YoutubeVideo.name)
-//                        .whereGreaterThanOrEqualTo("title", query)
-//                        .get()
-//                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                videoList.clear();
-//                                for (DocumentSnapshot doc : task.getResult()) {
-//                                    YoutubeVideo video = new YoutubeVideo();
-//
-//                                    video.setId(doc.getString("id"));
-//                                    video.setTitle(doc.getString("title"));
-//                                    video.setVideoUrl(doc.getString("videoUrl"));
-//                                    video.setPublishedAt(doc.getString("publishedAt"));
-//                                    video.setChannel(doc.get("channel", Channel.class));
-//                                    video.setThumbnail(doc.getString("thumbnail"));
-//                                    videoList.add(video);
-//                                }
-//                                searchAdapter.notifyDataSetChanged();
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//
-//                            }
-//                        });
-
                 return false;
             }
 
@@ -229,6 +199,35 @@ public class SearchFragment extends Fragment implements VideoItemClickedEvent {
             @Override
             public void onFailure(Call<JsonSearchAPIModel> call, Throwable t) {
                 Log.e("error", "onFailure" + t);
+
+                database.collection(EnumInit.Collections.YoutubeVideo.name)
+                        .whereGreaterThanOrEqualTo("title", query)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                videoList.clear();
+                                for (DocumentSnapshot doc : task.getResult()) {
+                                    YoutubeVideo video = new YoutubeVideo();
+
+                                    video.setId(doc.getString("id"));
+                                    video.setTitle(doc.getString("title"));
+                                    video.setVideoUrl(doc.getString("videoUrl"));
+                                    video.setPublishedAt(doc.getString("publishedAt"));
+                                    video.setChannel(doc.get("channel", Channel.class));
+                                    video.setThumbnail(doc.getString("thumbnail"));
+                                    videoList.add(video);
+                                }
+                                searchAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+
             }
         });
     }
