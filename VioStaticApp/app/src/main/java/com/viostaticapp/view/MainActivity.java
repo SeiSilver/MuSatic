@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
         receiver = new BroadCardReceiver();
         registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
-        initData();
-
     }
 
 
@@ -57,17 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initData() {
-
-//        YoutubeAPISearch test = new YoutubeAPISearch();
-//        test.search("yoasobi song");
-//        test.search("hololive song");
-//        test.search("phim reviewer");
-//        test.search("vì sao lại phế");
-//        test.search("schannel");
-//        test.search("android studio");
-
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

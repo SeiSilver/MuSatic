@@ -1,36 +1,40 @@
 package com.viostaticapp.view;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.viostaticapp.R;
 import com.viostaticapp._config.YoutubeAPIConfig;
+import com.viostaticapp.data.EnumInit;
 import com.viostaticapp.data.model.YoutubeVideo;
+import com.viostaticapp.service.LibraryItemMenuOption;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class YoutubePlayerActivity extends YouTubeBaseActivity {
 
@@ -41,6 +45,8 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity {
     ImageView player_back_btn;
 
     FloatingActionButton showPlayerOption;
+
+    public YoutubeVideo youtubeVideo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +62,11 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity {
 
         Intent intent = getIntent();
 
-
         runVideo(intent);
     }
 
     private void runVideo(Intent intent) {
-        YoutubeVideo youtubeVideo = (YoutubeVideo) intent.getSerializableExtra("youtubeVideo");
+        youtubeVideo = (YoutubeVideo) intent.getSerializableExtra("youtubeVideo");
 
         String videoId = youtubeVideo.getId();
 
@@ -99,40 +104,10 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity {
     }
 
     // onclick
-    @SuppressLint("RestrictedApi")
     public void showPlayerOptionMenu(View v) {
-
-        MenuBuilder menuBuilder = new MenuBuilder(this);
-        MenuInflater inflater = new MenuInflater(this);
-        inflater.inflate(R.menu.player_options_menu, menuBuilder);
-
-        menuBuilder.setCallback(new MenuBuilder.Callback() {
-            @Override
-            public boolean onMenuItemSelected(@NonNull MenuBuilder menu, @NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.addPlaylist:
-                        Toast.makeText(getApplicationContext(), "add", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.deletePlaylist:
-                        Toast.makeText(getApplicationContext(), "remove", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.openYoutube:
-                        Toast.makeText(getApplicationContext(), "go to youtube", Toast.LENGTH_SHORT).show();
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-
-            @Override
-            public void onMenuModeChange(@NonNull MenuBuilder menu) {
-
-            }
-        });
-
-        MenuPopupHelper menuHelper = new MenuPopupHelper(this, menuBuilder, v);
-        menuHelper.setForceShowIcon(true);
-        menuHelper.show();
+        LibraryItemMenuOption.showPopupMenu(v, youtubeVideo, this);
     }
+
+
 
 }

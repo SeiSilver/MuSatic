@@ -17,6 +17,7 @@ import com.viostaticapp.R;
 import com.viostaticapp.data.model.YoutubeVideo;
 import com.viostaticapp.present._common.BaseOnClickedEvent;
 import com.viostaticapp.present._common.VideoItemClickedEvent;
+import com.viostaticapp.service.LibraryItemMenuOption;
 import com.viostaticapp.view.YoutubePlayerActivity;
 
 import java.util.List;
@@ -55,6 +56,13 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<HomeRecommendAdap
         holder.date_publish_text.setText(videoList.get(position).getPublishedAt());
 //        holder.date_publish_text.setSelected(true);
 
+        holder.popupMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LibraryItemMenuOption.showPopupMenu(v, videoList.get(position), context);
+            }
+        });
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,12 +80,14 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<HomeRecommendAdap
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView rec_image_item;
+        ImageView rec_image_item, popupMenuButton;
         TextView rec_video_name, date_publish_text;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
             rec_image_item = itemView.findViewById(R.id.rec_image_item);
+            popupMenuButton = itemView.findViewById(R.id.popupMenuButton);
+
             rec_video_name = itemView.findViewById(R.id.rec_video_name);
             date_publish_text = itemView.findViewById(R.id.date_publish_text);
         }
