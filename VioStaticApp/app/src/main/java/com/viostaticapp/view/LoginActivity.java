@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
         edtEmail = findViewById(R.id.edt_login_email);
         edtPassword = findViewById(R.id.edt_login_password);
-        pref = getSharedPreferences("VioStaticPref", Context.MODE_PRIVATE);;
+        pref = getSharedPreferences("VioStaticPref", Context.MODE_PRIVATE);
         editor = pref.edit();
     }
 

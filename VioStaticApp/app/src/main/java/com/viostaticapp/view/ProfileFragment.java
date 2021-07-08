@@ -56,8 +56,7 @@ public class ProfileFragment extends Fragment {
     ProgressDialog progressDialog;
 
     SharedPreferences pref;
-
-    private String username;
+    SharedPreferences.Editor editor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,6 +77,7 @@ public class ProfileFragment extends Fragment {
         progressDialog = new ProgressDialog(getContext());
 
         pref = getActivity().getSharedPreferences("VioStaticPref", Context.MODE_PRIVATE);
+        editor = pref.edit();
 
         profile_tv_user = view.findViewById(R.id.profile_tv_user);
         profile_logout_tv = view.findViewById(R.id.profile_logout_tv);
@@ -226,6 +226,7 @@ public class ProfileFragment extends Fragment {
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                             if (task.getResult().get("password").toString().equals(edt_confirmPassword.getText().toString())){
                                                 update("name",edt_changeUsername_newUsername.getText().toString());
+                                                saveSharedPreferences(user);
                                                 reloadLoginStatus();
                                                 reloadProfile();
                                             }
@@ -251,6 +252,21 @@ public class ProfileFragment extends Fragment {
                     }
                 })
                 .show();
+
+    }
+
+    private void saveSharedPreferences(FirebaseUser user){
+
+        editor.clear();
+
+        db.collection(EnumInit.Collections.User.name).document(user.getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
+                        editor.putString("username", task.getResult().get("name").toString()) ;
+                        editor.commit();
+                    }
+                });
 
     }
 
