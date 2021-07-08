@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
@@ -56,8 +57,7 @@ public class ProfileFragment extends Fragment {
     ProgressDialog progressDialog;
 
     SharedPreferences pref;
-
-    private String username;
+    SharedPreferences.Editor editor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,6 +78,7 @@ public class ProfileFragment extends Fragment {
         progressDialog = new ProgressDialog(getContext());
 
         pref = getActivity().getSharedPreferences("VioStaticPref", Context.MODE_PRIVATE);
+        editor = pref.edit();
 
         profile_tv_user = view.findViewById(R.id.profile_tv_user);
         profile_logout_tv = view.findViewById(R.id.profile_logout_tv);
@@ -117,9 +118,9 @@ public class ProfileFragment extends Fragment {
             cv_accountSetting.setVisibility(View.VISIBLE);
             profile_tv_user.setVisibility(View.VISIBLE);
             profile_logout_tv.setVisibility(View.VISIBLE);
-            profile_tv_user.setText(pref.getString("username","Username"));;
-        }
+            profile_tv_user.setText(pref.getString("username","Username"));
 
+        }
     }
 
     @Override
@@ -227,7 +228,8 @@ public class ProfileFragment extends Fragment {
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                             if (task.getResult().get("password").toString().equals(edt_confirmPassword.getText().toString())){
                                                 update("name",edt_changeUsername_newUsername.getText().toString());
-                                                reloadLoginStatus();
+                                                saveSharedPreferences(user);
+                                                profile_tv_user.setText(edt_changeUsername_newUsername.getText().toString());
                                                 reloadProfile();
                                             }
                                             else{
@@ -252,6 +254,21 @@ public class ProfileFragment extends Fragment {
                     }
                 })
                 .show();
+
+    }
+
+    private void saveSharedPreferences(FirebaseUser user){
+
+        editor.clear();
+
+        db.collection(EnumInit.Collections.User.name).document(user.getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
+                        editor.putString("username", task.getResult().get("name").toString()) ;
+                        editor.commit();
+                    }
+                });
 
     }
 
@@ -308,7 +325,6 @@ public class ProfileFragment extends Fragment {
                                                 if (task.getResult().get("password").toString().equals(edt_confirmPassword.getText().toString())){
                                                     update("password",edt_changePassword_newPassword.getText().toString());
                                                     reloadLoginStatus();
-                                                    reloadProfile();
                                                 }
                                                 else{
                                                     progressDialog.dismiss();
@@ -348,6 +364,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+
     void reloadProfile(){
         lo_changeUsername.setVisibility(View.GONE);
         lo_changePassword.setVisibility(View.GONE);
@@ -355,4 +372,5 @@ public class ProfileFragment extends Fragment {
         edt_changePassword_newPassword.setText("");
         edt_changePassword_retypePassword.setText("");
     }
+
 }
