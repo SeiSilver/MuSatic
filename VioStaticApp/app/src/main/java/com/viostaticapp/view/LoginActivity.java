@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Patterns;
@@ -13,15 +14,19 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.viostaticapp.R;
+import com.viostaticapp.data.EnumInit;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -29,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
     EditText edtEmail, edtPassword;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
 
         edtEmail = findViewById(R.id.edt_login_email);
         edtPassword = findViewById(R.id.edt_login_password);
+        pref = getSharedPreferences("VioStaticPref", Context.MODE_PRIVATE);;
+        editor = pref.edit();
     }
 
     // onClickEvent
@@ -77,6 +86,9 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     FirebaseUser user = authResult.getUser();
                     startMainActivity(user);
+
+                    saveSharedPreferences(user);
+
                     Toast.makeText(getApplicationContext(), "Login Success at " + user.getEmail(), Toast.LENGTH_SHORT).show();
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -94,6 +106,21 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         }
+
+    }
+
+    private void saveSharedPreferences(FirebaseUser user){
+
+        editor.clear();
+
+        db.collection(EnumInit.Collections.User.name).document(user.getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
+                        editor.putString("username", task.getResult().get("name").toString()) ;
+                        editor.commit();
+                    }
+                });
 
     }
 
