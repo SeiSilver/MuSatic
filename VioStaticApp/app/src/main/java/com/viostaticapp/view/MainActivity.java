@@ -1,6 +1,8 @@
 package com.viostaticapp.view;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -13,13 +15,14 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.viostaticapp.R;
+import com.viostaticapp.service.BroadCardReceiver;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
     private NavController navController;
     private Toolbar toolbar;
-//    private BroadCardReceiver receiver;
+    private BroadCardReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +42,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-//        receiver = new BroadCardReceiver();
-//        registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        receiver = new BroadCardReceiver();
+        registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         initData();
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-//        unregisterReceiver(receiver);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
