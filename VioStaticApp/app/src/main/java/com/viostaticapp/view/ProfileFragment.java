@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
@@ -116,9 +117,9 @@ public class ProfileFragment extends Fragment {
             profile_login_btn.setVisibility(View.INVISIBLE);
             profile_tv_user.setVisibility(View.VISIBLE);
             profile_logout_tv.setVisibility(View.VISIBLE);
-            profile_tv_user.setText(pref.getString("username","Username"));;
-        }
+            profile_tv_user.setText(pref.getString("username","Username"));
 
+        }
     }
 
     @Override
@@ -227,7 +228,7 @@ public class ProfileFragment extends Fragment {
                                             if (task.getResult().get("password").toString().equals(edt_confirmPassword.getText().toString())){
                                                 update("name",edt_changeUsername_newUsername.getText().toString());
                                                 saveSharedPreferences(user);
-                                                reloadLoginStatus();
+                                                profile_tv_user.setText(edt_changeUsername_newUsername.getText().toString());
                                                 reloadProfile();
                                             }
                                             else{
@@ -323,7 +324,6 @@ public class ProfileFragment extends Fragment {
                                                 if (task.getResult().get("password").toString().equals(edt_confirmPassword.getText().toString())){
                                                     update("password",edt_changePassword_newPassword.getText().toString());
                                                     reloadLoginStatus();
-                                                    reloadProfile();
                                                 }
                                                 else{
                                                     progressDialog.dismiss();
@@ -363,6 +363,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+
     void reloadProfile(){
         lo_changeUsername.setVisibility(View.GONE);
         lo_changePassword.setVisibility(View.GONE);
@@ -370,4 +371,5 @@ public class ProfileFragment extends Fragment {
         edt_changePassword_newPassword.setText("");
         edt_changePassword_retypePassword.setText("");
     }
+
 }
