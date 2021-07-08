@@ -1,8 +1,6 @@
-package com.viostaticapp.present.searchPresent;
+package com.viostaticapp.present.libraryPresent;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,21 +15,23 @@ import com.viostaticapp.R;
 import com.viostaticapp.data.model.YoutubeVideo;
 import com.viostaticapp.present._common.VideoItemClickedEvent;
 import com.viostaticapp.service.LibraryItemMenuOption;
-import com.viostaticapp.view.YoutubePlayerActivity;
 
 import java.util.List;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.CustomViewHolder> {
+public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.CustomViewHolder> {
 
     private Context context;
     private List<YoutubeVideo> videoList;
 
     private VideoItemClickedEvent videoItemClickedEvent;
+    private CallReloadLibrary callReloadLibrary;
 
-    public SearchAdapter(Context context, List<YoutubeVideo> videoList, VideoItemClickedEvent videoItemClickedEvent) {
+
+    public LibraryAdapter(Context context, List<YoutubeVideo> videoList, VideoItemClickedEvent videoItemClickedEvent, CallReloadLibrary callReloadLibrary) {
         this.context = context;
         this.videoList = videoList;
         this.videoItemClickedEvent = videoItemClickedEvent;
+        this.callReloadLibrary = callReloadLibrary;
     }
 
     @NonNull
@@ -42,7 +42,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.CustomView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchAdapter.CustomViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull LibraryAdapter.CustomViewHolder holder, int position) {
 
         String url = videoList.get(position).getThumbnail();
         Picasso.get().load(url).fit().centerCrop(2).placeholder(R.drawable.img_not_found).into(holder.rec_image_item);
@@ -53,7 +53,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.CustomView
         holder.popupMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LibraryItemMenuOption.showPopupMenu(v, videoList.get(position), context);
+                callReloadLibrary.reloadLibrary(videoList.get(position), v);
+
             }
         });
 
@@ -84,6 +85,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.CustomView
             rec_video_name = itemView.findViewById(R.id.rec_video_name);
             date_publish_text = itemView.findViewById(R.id.date_publish_text);
         }
+
+    }
+
+    public interface CallReloadLibrary {
+
+        void reloadLibrary(YoutubeVideo video, View v);
 
     }
 

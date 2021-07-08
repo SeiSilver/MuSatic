@@ -5,7 +5,8 @@ public class EnumInit {
     public enum Collections {
 
         YoutubeVideo("YoutubeVideo"),
-        User("User");
+        User("User"),
+        Library("Library");
 
         public String name;
 

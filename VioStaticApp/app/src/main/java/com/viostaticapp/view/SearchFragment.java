@@ -131,9 +131,47 @@ public class SearchFragment extends Fragment implements VideoItemClickedEvent {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
+                if (newText == null || newText.isEmpty()) {
+                    reloadData();
+                }
                 return false;
             }
         });
+
+    }
+
+    private void reloadData() {
+
+        database.collection(EnumInit.Collections.YoutubeVideo.name)
+                .orderBy("title")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (DocumentSnapshot doc : task.getResult()) {
+                            YoutubeVideo video = new YoutubeVideo();
+
+                            video.setId(doc.getString("id"));
+                            video.setTitle(doc.getString("title"));
+                            video.setVideoUrl(doc.getString("videoUrl"));
+                            video.setPublishedAt(doc.getString("publishedAt"));
+                            video.setChannel(doc.get("channel", Channel.class));
+                            video.setThumbnail(doc.getString("thumbnail"));
+                            video.setDescription(doc.getString("description"));
+
+                            videoList.add(video);
+                        }
+                        searchAdapter.notifyDataSetChanged();
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
 
     }
 
