@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -43,16 +44,18 @@ public class ProfileFragment extends Fragment {
 
     TextView profile_logout_tv, profile_tv_user;
     Button profile_login_btn;
-    ImageView iv_changeUsername_arrowIcon, iv_changeUsername_save, iv_changePassword_show, iv_changePassword_save;
-    CardView cv_changeUsername, cv_changePassword, cv_accountSetting;
+    ImageView iv_changeUsername_arrowIcon, iv_changeUsername_save, iv_changePassword_show,iv_changePassword_save, iv_changePassword_arrowIcon;
+    CardView cv_changeUsername, cv_changePassword,cv_accountSetting;
     ConstraintLayout lo_changeUsername, lo_changePassword;
-    EditText edt_confirmPassword, edt_changeUsername_newUsername, edt_changePassword_newPassword, edt_changePassword_retypePassword;
+    EditText edt_confirmPassword, edt_changeUsername_newUsername,edt_changePassword_newPassword,edt_changePassword_retypePassword;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
     FirebaseUser user;
 
     ProgressDialog progressDialog;
+
+    SharedPreferences pref;
 
     private String username;
 
@@ -69,9 +72,12 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         progressDialog = new ProgressDialog(getContext());
+
+        pref = getActivity().getSharedPreferences("VioStaticPref", Context.MODE_PRIVATE);
 
         profile_tv_user = view.findViewById(R.id.profile_tv_user);
         profile_logout_tv = view.findViewById(R.id.profile_logout_tv);
@@ -81,7 +87,7 @@ public class ProfileFragment extends Fragment {
         iv_changeUsername_arrowIcon = view.findViewById(R.id.iv_changeUsername_arrowIcon);
         iv_changeUsername_save = view.findViewById(R.id.iv_saveUsername);
         lo_changeUsername = view.findViewById(R.id.lo_changeUsernameExpand);
-        cv_changeUsername = view.findViewById(R.id.cv_changeUsername);
+        cv_changeUsername=view.findViewById(R.id.cv_changeUsername);
         edt_changeUsername_newUsername = view.findViewById(R.id.edt_changeUsername_newUsername);
         /*Change password*/
         iv_changePassword_show = view.findViewById(R.id.iv_changePassword_show);
@@ -90,6 +96,7 @@ public class ProfileFragment extends Fragment {
         lo_changePassword = view.findViewById(R.id.lo_changePasswordExpand);
         edt_changePassword_newPassword = view.findViewById(R.id.edt_changePassword_newPassword);
         edt_changePassword_retypePassword = view.findViewById(R.id.edt_changePassword_retypePassword);
+        iv_changePassword_arrowIcon = view.findViewById(R.id.iv_changePassword_arrowIcon);
 
         reloadLoginStatus();
 
@@ -104,12 +111,14 @@ public class ProfileFragment extends Fragment {
             profile_login_btn.setVisibility(View.VISIBLE);
             profile_logout_tv.setVisibility(View.INVISIBLE);
             profile_tv_user.setVisibility(View.INVISIBLE);
+            cv_accountSetting.setVisibility(View.INVISIBLE);
         } else {
             profile_login_btn.setVisibility(View.INVISIBLE);
             profile_tv_user.setVisibility(View.VISIBLE);
             profile_logout_tv.setVisibility(View.VISIBLE);
-            getUsername();
+            profile_tv_user.setText(pref.getString("username","Username"));;
         }
+
     }
 
     @Override
@@ -137,30 +146,27 @@ public class ProfileFragment extends Fragment {
 
         cv_changeUsername.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                layoutChangeUsername();
-            }
+            public void onClick(View v) {layoutChangeUsername();}
         });
 
         iv_changeUsername_save.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                changeUsername();
-            }
+            public void onClick(View v) {changeUsername();}
         });
 
         iv_changePassword_show.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                showPassword();
-            }
+            public void onClick(View v) {showPassword();}
         });
 
         iv_changePassword_save.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                changePassword();
-            }
+            public void onClick(View v) {changePassword();}
+        });
+
+        cv_changePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {layoutChangePassword();}
         });
     }
 
@@ -188,22 +194,22 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    public void layoutChangeUsername() {
-        if (lo_changeUsername.getVisibility() == View.GONE) {
+    public void layoutChangeUsername(){
+        if(lo_changeUsername.getVisibility() == View.GONE){
             TransitionManager.beginDelayedTransition(lo_changeUsername, new AutoTransition());
             lo_changeUsername.setVisibility(View.VISIBLE);
             iv_changeUsername_arrowIcon.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_36);
-        } else {
+        }else{
             TransitionManager.beginDelayedTransition(lo_changeUsername, new AutoTransition());
             lo_changeUsername.setVisibility(View.GONE);
             iv_changeUsername_arrowIcon.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_36);
         }
     }
 
-    public void changeUsername() {
+    public void changeUsername(){
 
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_confirm_password, (ViewGroup) getView(), false);
-        edt_confirmPassword = view.findViewById(R.id.et_confirmPassword);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_confirm_password, (ViewGroup)getView(),false);
+        edt_confirmPassword =view.findViewById(R.id.et_confirmPassword);
         new AlertDialog.Builder(getContext())
                 .setTitle("Confirm")
                 .setMessage("Please confirm!")
@@ -211,17 +217,19 @@ public class ProfileFragment extends Fragment {
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        FirebaseUser user = firebaseAuth.getCurrentUser();
-                        if (user != null) {
+
+
+                        if(user!=null){
                             db.collection(EnumInit.Collections.User.name).document(user.getUid()).get()
                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.getResult().get("password").toString().equals(edt_confirmPassword.getText().toString())) {
-                                                update("name", edt_changeUsername_newUsername.getText().toString());
+                                            if (task.getResult().get("password").toString().equals(edt_confirmPassword.getText().toString())){
+                                                update("name",edt_changeUsername_newUsername.getText().toString());
                                                 reloadLoginStatus();
                                                 reloadProfile();
-                                            } else {
+                                            }
+                                            else{
                                                 progressDialog.dismiss();
                                                 Toast.makeText(getContext(), "Incorrect password!", Toast.LENGTH_SHORT).show();
                                             }
@@ -230,7 +238,7 @@ public class ProfileFragment extends Fragment {
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), "Failed!",Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         }
@@ -246,52 +254,43 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    private void update(String field, String value) {
-        progressDialog.setTitle("Update " + field + "...");
+
+    private void update(String field, String value){
+        progressDialog.setTitle("Update "+field+"...");
         progressDialog.show();
 
-        db.collection(EnumInit.Collections.User.name).document(firebaseAuth.getCurrentUser().getUid())
-                .update(field, value)
+        db.collection(EnumInit.Collections.User.name).document(user.getUid())
+                .update(field,value)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         progressDialog.dismiss();
-                        Toast.makeText(getContext(), "Change " + field + " successful!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Change "+field+" successful!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
-                        Toast.makeText(getContext(), "Change " + field + " failed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Change "+field+" failed!", Toast.LENGTH_SHORT).show();
 
                     }
                 });
     }
 
-    private void getUsername() {
-        db.collection(EnumInit.Collections.User.name).document(firebaseAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                username = task.getResult().get("name").toString();
-                profile_tv_user.setText(username);
-            }
-        });
-    }
 
-    private void showPassword() {
-        if (edt_changePassword_newPassword.getInputType() == InputType.TYPE_CLASS_TEXT)
+    private void showPassword(){
+        if(edt_changePassword_newPassword.getInputType()==InputType.TYPE_CLASS_TEXT)
             // https://stackoverflow.com/questions/9307680/show-the-password-with-edittext
             edt_changePassword_newPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         else
             edt_changePassword_newPassword.setInputType(InputType.TYPE_CLASS_TEXT);
     }
-
-    private void changePassword() {
-        if (edt_changePassword_newPassword.getText().toString().equals(
-                edt_changePassword_retypePassword.getText().toString())) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_confirm_password, (ViewGroup) getView(), false);
-            edt_confirmPassword = view.findViewById(R.id.et_confirmPassword);
+    private void changePassword(){
+        if(edt_changePassword_newPassword.getText().toString().equals(
+                edt_changePassword_retypePassword.getText().toString())){
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_confirm_password, (ViewGroup)getView(),false);
+            edt_confirmPassword =view.findViewById(R.id.et_confirmPassword);
             new AlertDialog.Builder(getContext())
                     .setTitle("Confirm")
                     .setMessage("Please confirm!")
@@ -300,17 +299,17 @@ public class ProfileFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            if (user != null) {
+                            if(user!=null){
                                 db.collection(EnumInit.Collections.User.name).document(user.getUid()).get()
                                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if (task.getResult().get("password").toString().equals(edt_confirmPassword.getText().toString())) {
-                                                    update("password", edt_changePassword_newPassword.getText().toString());
+                                                if (task.getResult().get("password").toString().equals(edt_confirmPassword.getText().toString())){
+                                                    update("password",edt_changePassword_newPassword.getText().toString());
                                                     reloadLoginStatus();
                                                     reloadProfile();
-                                                } else {
+                                                }
+                                                else{
                                                     progressDialog.dismiss();
                                                     Toast.makeText(getContext(), "Incorrect password!", Toast.LENGTH_SHORT).show();
                                                 }
@@ -319,7 +318,7 @@ public class ProfileFragment extends Fragment {
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), "Failed!",Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }
@@ -332,11 +331,23 @@ public class ProfileFragment extends Fragment {
                         }
                     })
                     .show();
-        } else
-            Toast.makeText(getContext(), "Password not match!", Toast.LENGTH_SHORT).show();
+        }else
+            Toast.makeText(getContext(),"Password not match!", Toast.LENGTH_SHORT).show();
     }
 
-    void reloadProfile() {
+    public void layoutChangePassword(){
+        if(lo_changePassword.getVisibility() == View.GONE){
+            TransitionManager.beginDelayedTransition(lo_changePassword, new AutoTransition());
+            lo_changePassword.setVisibility(View.VISIBLE);
+            iv_changePassword_arrowIcon.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_36);
+        }else{
+            TransitionManager.beginDelayedTransition(lo_changePassword, new AutoTransition());
+            lo_changePassword.setVisibility(View.GONE);
+            iv_changePassword_arrowIcon.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_36);
+        }
+    }
+
+    void reloadProfile(){
         lo_changeUsername.setVisibility(View.GONE);
         lo_changePassword.setVisibility(View.GONE);
         edt_changeUsername_newUsername.setText("");
