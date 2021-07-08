@@ -47,6 +47,7 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:text="LOGIN"
+                android:textColor="@color/black"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintCircleRadius="20dp"
