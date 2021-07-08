@@ -109,11 +109,12 @@ public class ProfileFragment extends Fragment {
         user = firebaseAuth.getCurrentUser();
         if (user == null) {
             profile_login_btn.setVisibility(View.VISIBLE);
-            profile_logout_tv.setVisibility(View.INVISIBLE);
-            profile_tv_user.setVisibility(View.INVISIBLE);
-            cv_accountSetting.setVisibility(View.INVISIBLE);
+            profile_logout_tv.setVisibility(View.GONE);
+            profile_tv_user.setVisibility(View.GONE);
+            cv_accountSetting.setVisibility(View.GONE);
         } else {
-            profile_login_btn.setVisibility(View.INVISIBLE);
+            profile_login_btn.setVisibility(View.GONE);
+            cv_accountSetting.setVisibility(View.VISIBLE);
             profile_tv_user.setVisibility(View.VISIBLE);
             profile_logout_tv.setVisibility(View.VISIBLE);
             profile_tv_user.setText(pref.getString("username","Username"));;
