@@ -1,19 +1,17 @@
 package com.viostaticapp.view;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -26,7 +24,6 @@ import com.viostaticapp.R;
 import com.viostaticapp.data.EnumInit;
 import com.viostaticapp.data.model.Channel;
 import com.viostaticapp.data.model.YoutubeVideo;
-import com.viostaticapp.present._common.BaseOnClickedEvent;
 import com.viostaticapp.present._common.VideoItemClickedEvent;
 import com.viostaticapp.present.homePresent.HomeLatestAdapter;
 import com.viostaticapp.present.homePresent.HomeRecommendAdapter;
@@ -103,11 +100,12 @@ public class HomeFragment extends Fragment implements VideoItemClickedEvent {
 
         database.collection(EnumInit.Collections.YoutubeVideo.name)
                 .orderBy("publishedAt", Query.Direction.DESCENDING)
-                .limit(10)
+                .limit(5)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        latestVideoList.clear();
                         for (DocumentSnapshot doc : task.getResult()) {
 
                             YoutubeVideo video = new YoutubeVideo();
@@ -146,8 +144,9 @@ public class HomeFragment extends Fragment implements VideoItemClickedEvent {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        for (DocumentSnapshot doc : task.getResult()) {
+                        recommendVideoList.clear();
 
+                        for (DocumentSnapshot doc : task.getResult()) {
                             if (random.nextBoolean()) {
                                 continue;
                             }

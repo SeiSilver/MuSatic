@@ -1,13 +1,5 @@
 package com.viostaticapp.data.JsonSearchModel;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class SnippetYT {
 
     private String title;
@@ -22,4 +14,51 @@ public class SnippetYT {
 
     private String publishedAt;
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
+
+    public String getChannelTitle() {
+        return channelTitle;
+    }
+
+    public void setChannelTitle(String channelTitle) {
+        this.channelTitle = channelTitle;
+    }
+
+    public ThumbnailYT getThumbnails() {
+        return thumbnails;
+    }
+
+    public void setThumbnails(ThumbnailYT thumbnails) {
+        this.thumbnails = thumbnails;
+    }
+
+    public String getPublishedAt() {
+        return publishedAt;
+    }
+
+    public void setPublishedAt(String publishedAt) {
+        this.publishedAt = publishedAt;
+    }
 }
