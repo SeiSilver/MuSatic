@@ -14,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VioStaticAppCustom"
         android:usesCleartextTraffic="true">
+
         <service
             android:name=".service.SaveDataService"
             android:enabled="true"
@@ -31,4 +32,9 @@
         </activity>
     </application>
 
+    <queries>
+        <intent>
+            <action android:name="com.google.android.youtube.api.service.START" />
+        </intent>
+    </queries>
 </manifest>

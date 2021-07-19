@@ -113,44 +113,46 @@ public class LibraryFragment extends Fragment implements VideoItemClickedEvent, 
 
     private void reloadData() {
 
-        database.collection(EnumInit.Collections.Library.name).document(user.getEmail())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        videoList.clear();
+        if (user != null || user.getEmail() != null) {
+            database.collection(EnumInit.Collections.Library.name).document(user.getEmail())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            videoList.clear();
 
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
 
-                                Map<String, Object> map = document.getData();
-                                if (map != null) {
-                                    for (Map.Entry<String, Object> entry : map.entrySet()) {
+                                    Map<String, Object> map = document.getData();
+                                    if (map != null) {
+                                        for (Map.Entry<String, Object> entry : map.entrySet()) {
 
-                                        HashMap<String, Object> temp = (HashMap<String, Object>) entry.getValue();
-                                        YoutubeVideo video = new YoutubeVideo();
-                                        video.setId((String) temp.get("id"));
-                                        video.setTitle((String) temp.get("title"));
-                                        video.setVideoUrl((String) temp.get("videoUrl"));
-                                        video.setPublishedAt((String) temp.get("publishedAt"));
-                                        video.setThumbnail((String) temp.get("thumbnail"));
-                                        video.setDescription((String) temp.get("description"));
+                                            HashMap<String, Object> temp = (HashMap<String, Object>) entry.getValue();
+                                            YoutubeVideo video = new YoutubeVideo();
+                                            video.setId((String) temp.get("id"));
+                                            video.setTitle((String) temp.get("title"));
+                                            video.setVideoUrl((String) temp.get("videoUrl"));
+                                            video.setPublishedAt((String) temp.get("publishedAt"));
+                                            video.setThumbnail((String) temp.get("thumbnail"));
+                                            video.setDescription((String) temp.get("description"));
 
-                                        videoList.add(video);
+                                            videoList.add(video);
+                                        }
                                     }
+                                    libraryAdapter.notifyDataSetChanged();
                                 }
-                                libraryAdapter.notifyDataSetChanged();
                             }
                         }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
 
-                    }
-                });
+                        }
+                    });
+        }
 
     }
 
