@@ -29,9 +29,9 @@ public class SaveDataService extends Service implements Runnable {
         Log.e("saveDatabase", "run save service");
         Log.e("saveDatabase", "saveProces");
 
-        for (YoutubeVideo video: SearchFragment.videoList) {
+        for (YoutubeVideo video : SearchFragment.videoList) {
 
-            database.collection("TEST").document(video.getId()).set(video);
+            database.collection(EnumInit.Collections.Library.name).document(video.getId()).set(video);
             Log.e("saveDatabase", "saved: " + video.getTitle());
 
         }
