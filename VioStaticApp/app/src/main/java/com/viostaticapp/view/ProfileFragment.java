@@ -45,10 +45,10 @@ public class ProfileFragment extends Fragment {
 
     TextView profile_logout_tv, profile_tv_user;
     Button profile_login_btn;
-    ImageView iv_changeUsername_arrowIcon, iv_changeUsername_save, iv_changePassword_show,iv_changePassword_save, iv_changePassword_arrowIcon;
-    CardView cv_changeUsername, cv_changePassword,cv_accountSetting;
+    ImageView iv_changeUsername_arrowIcon, iv_changeUsername_save, iv_changePassword_show, iv_changePassword_save, iv_changePassword_arrowIcon;
+    CardView cv_changeUsername, cv_changePassword, cv_accountSetting;
     ConstraintLayout lo_changeUsername, lo_changePassword;
-    EditText edt_confirmPassword, edt_changeUsername_newUsername,edt_changePassword_newPassword,edt_changePassword_retypePassword;
+    EditText edt_confirmPassword, edt_changeUsername_newUsername, edt_changePassword_newPassword, edt_changePassword_retypePassword;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
@@ -58,6 +58,8 @@ public class ProfileFragment extends Fragment {
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+
+    private String username;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,7 +90,7 @@ public class ProfileFragment extends Fragment {
         iv_changeUsername_arrowIcon = view.findViewById(R.id.iv_changeUsername_arrowIcon);
         iv_changeUsername_save = view.findViewById(R.id.iv_saveUsername);
         lo_changeUsername = view.findViewById(R.id.lo_changeUsernameExpand);
-        cv_changeUsername=view.findViewById(R.id.cv_changeUsername);
+        cv_changeUsername = view.findViewById(R.id.cv_changeUsername);
         edt_changeUsername_newUsername = view.findViewById(R.id.edt_changeUsername_newUsername);
         /*Change password*/
         iv_changePassword_show = view.findViewById(R.id.iv_changePassword_show);
@@ -118,7 +120,8 @@ public class ProfileFragment extends Fragment {
             cv_accountSetting.setVisibility(View.VISIBLE);
             profile_tv_user.setVisibility(View.VISIBLE);
             profile_logout_tv.setVisibility(View.VISIBLE);
-            profile_tv_user.setText(pref.getString("username","Username"));
+            profile_tv_user.setText(pref.getString("username", "username"));
+        }
 
         }
     }
@@ -148,27 +151,37 @@ public class ProfileFragment extends Fragment {
 
         cv_changeUsername.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {layoutChangeUsername();}
+            public void onClick(View v) {
+                layoutChangeUsername();
+            }
         });
 
         iv_changeUsername_save.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {changeUsername();}
+            public void onClick(View v) {
+                changeUsername();
+            }
         });
 
         iv_changePassword_show.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {showPassword();}
+            public void onClick(View v) {
+                showPassword();
+            }
         });
 
         iv_changePassword_save.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {changePassword();}
+            public void onClick(View v) {
+                changePassword();
+            }
         });
 
         cv_changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {layoutChangePassword();}
+            public void onClick(View v) {
+                layoutChangePassword();
+            }
         });
     }
 
@@ -182,10 +195,11 @@ public class ProfileFragment extends Fragment {
                         Toast.makeText(getContext(), "Logged out successfully!", Toast.LENGTH_SHORT).show();
                         firebaseAuth.signOut();
                         reloadLoginStatus();
-
+                        editor.remove("VioStaticPref");
                     }
                 }).setNegativeButton("Cancel", null)
                 .create().show();
+
     }
 
     public void navigateToLoginPage() {
@@ -196,22 +210,22 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    public void layoutChangeUsername(){
-        if(lo_changeUsername.getVisibility() == View.GONE){
+    public void layoutChangeUsername() {
+        if (lo_changeUsername.getVisibility() == View.GONE) {
             TransitionManager.beginDelayedTransition(lo_changeUsername, new AutoTransition());
             lo_changeUsername.setVisibility(View.VISIBLE);
             iv_changeUsername_arrowIcon.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_36);
-        }else{
+        } else {
             TransitionManager.beginDelayedTransition(lo_changeUsername, new AutoTransition());
             lo_changeUsername.setVisibility(View.GONE);
             iv_changeUsername_arrowIcon.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_36);
         }
     }
 
-    public void changeUsername(){
+    public void changeUsername() {
 
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_confirm_password, (ViewGroup)getView(),false);
-        edt_confirmPassword =view.findViewById(R.id.et_confirmPassword);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_confirm_password, (ViewGroup) getView(), false);
+        edt_confirmPassword = view.findViewById(R.id.et_confirmPassword);
         new AlertDialog.Builder(getContext())
                 .setTitle("Confirm")
                 .setMessage("Please confirm!")
@@ -220,19 +234,18 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-
-                        if(user!=null){
+                        if (user != null) {
                             db.collection(EnumInit.Collections.User.name).document(user.getUid()).get()
                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.getResult().get("password").toString().equals(edt_confirmPassword.getText().toString())){
-                                                update("name",edt_changeUsername_newUsername.getText().toString());
-                                                saveSharedPreferences(user);
+                                            if (task.getResult().get("password").toString().equals(edt_confirmPassword.getText().toString())) {
+                                                update("name", edt_changeUsername_newUsername.getText().toString());
+                                                editor.putString("username", edt_changeUsername_newUsername.getText().toString());
+                                                editor.commit();
                                                 profile_tv_user.setText(edt_changeUsername_newUsername.getText().toString());
                                                 reloadProfile();
-                                            }
-                                            else{
+                                            } else {
                                                 progressDialog.dismiss();
                                                 Toast.makeText(getContext(), "Incorrect password!", Toast.LENGTH_SHORT).show();
                                             }
@@ -241,7 +254,7 @@ public class ProfileFragment extends Fragment {
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(getContext(), "Failed!",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         }
@@ -257,58 +270,43 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    private void saveSharedPreferences(FirebaseUser user){
-
-        editor.clear();
-
-        db.collection(EnumInit.Collections.User.name).document(user.getUid()).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
-                        editor.putString("username", task.getResult().get("name").toString()) ;
-                        editor.commit();
-                    }
-                });
-
-    }
-
-
-    private void update(String field, String value){
-        progressDialog.setTitle("Update "+field+"...");
+    private void update(String field, String value) {
+        progressDialog.setTitle("Update " + field + "...");
         progressDialog.show();
 
         db.collection(EnumInit.Collections.User.name).document(user.getUid())
-                .update(field,value)
+                .update(field, value)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         progressDialog.dismiss();
-                        Toast.makeText(getContext(), "Change "+field+" successful!", Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(getContext(), "Change " + field + " successful!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
-                        Toast.makeText(getContext(), "Change "+field+" failed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Change " + field + " failed!", Toast.LENGTH_SHORT).show();
 
                     }
                 });
     }
 
-
-    private void showPassword(){
-        if(edt_changePassword_newPassword.getInputType()==InputType.TYPE_CLASS_TEXT)
+    private void showPassword() {
+        if (edt_changePassword_newPassword.getInputType() == InputType.TYPE_CLASS_TEXT)
             // https://stackoverflow.com/questions/9307680/show-the-password-with-edittext
             edt_changePassword_newPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         else
             edt_changePassword_newPassword.setInputType(InputType.TYPE_CLASS_TEXT);
     }
-    private void changePassword(){
-        if(edt_changePassword_newPassword.getText().toString().equals(
-                edt_changePassword_retypePassword.getText().toString())){
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_confirm_password, (ViewGroup)getView(),false);
-            edt_confirmPassword =view.findViewById(R.id.et_confirmPassword);
+
+    private void changePassword() {
+        if (edt_changePassword_newPassword.getText().toString().equals(
+                edt_changePassword_retypePassword.getText().toString())) {
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_confirm_password, (ViewGroup) getView(), false);
+            edt_confirmPassword = view.findViewById(R.id.et_confirmPassword);
             new AlertDialog.Builder(getContext())
                     .setTitle("Confirm")
                     .setMessage("Please confirm!")
@@ -317,16 +315,16 @@ public class ProfileFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            if(user!=null){
+                            if (user != null) {
                                 db.collection(EnumInit.Collections.User.name).document(user.getUid()).get()
                                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if (task.getResult().get("password").toString().equals(edt_confirmPassword.getText().toString())){
-                                                    update("password",edt_changePassword_newPassword.getText().toString());
+                                                if (task.getResult().get("password").toString().equals(edt_confirmPassword.getText().toString())) {
+                                                    update("password", edt_changePassword_newPassword.getText().toString());
                                                     reloadLoginStatus();
-                                                }
-                                                else{
+                                                    reloadProfile();
+                                                } else {
                                                     progressDialog.dismiss();
                                                     Toast.makeText(getContext(), "Incorrect password!", Toast.LENGTH_SHORT).show();
                                                 }
@@ -335,7 +333,7 @@ public class ProfileFragment extends Fragment {
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(getContext(), "Failed!",Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }
@@ -348,24 +346,23 @@ public class ProfileFragment extends Fragment {
                         }
                     })
                     .show();
-        }else
-            Toast.makeText(getContext(),"Password not match!", Toast.LENGTH_SHORT).show();
+        } else
+            Toast.makeText(getContext(), "Password not match!", Toast.LENGTH_SHORT).show();
     }
 
-    public void layoutChangePassword(){
-        if(lo_changePassword.getVisibility() == View.GONE){
+    public void layoutChangePassword() {
+        if (lo_changePassword.getVisibility() == View.GONE) {
             TransitionManager.beginDelayedTransition(lo_changePassword, new AutoTransition());
             lo_changePassword.setVisibility(View.VISIBLE);
             iv_changePassword_arrowIcon.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_36);
-        }else{
+        } else {
             TransitionManager.beginDelayedTransition(lo_changePassword, new AutoTransition());
             lo_changePassword.setVisibility(View.GONE);
             iv_changePassword_arrowIcon.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_36);
         }
     }
 
-
-    void reloadProfile(){
+    void reloadProfile() {
         lo_changeUsername.setVisibility(View.GONE);
         lo_changePassword.setVisibility(View.GONE);
         edt_changeUsername_newUsername.setText("");

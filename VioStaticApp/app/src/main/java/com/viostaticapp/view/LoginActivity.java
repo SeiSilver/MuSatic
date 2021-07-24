@@ -1,5 +1,6 @@
 package com.viostaticapp.view;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -85,8 +86,6 @@ public class LoginActivity extends AppCompatActivity {
                 public void onSuccess(AuthResult authResult) {
                     progressDialog.dismiss();
                     FirebaseUser user = authResult.getUser();
-                    startMainActivity(user);
-
                     saveSharedPreferences(user);
 
                     Toast.makeText(getApplicationContext(), "Login Success at " + user.getEmail(), Toast.LENGTH_SHORT).show();
@@ -109,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void saveSharedPreferences(FirebaseUser user){
+    private void saveSharedPreferences(FirebaseUser user) {
 
         editor.clear();
 
@@ -117,18 +116,12 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
-                        editor.putString("username", task.getResult().get("name").toString()) ;
+                        editor.putString("username", task.getResult().get("name").toString());
                         editor.commit();
-                    }
+                        finish();
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);                    }
                 });
 
-    }
-
-    private void startMainActivity(FirebaseUser user) {
-        if (user != null) {
-            finish();
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-        }
     }
 
     private void createAlert(String alertTitle, String alertMessage, String positiveText) {
@@ -142,13 +135,26 @@ public class LoginActivity extends AppCompatActivity {
     // onClickEvent
     public void redirectToSignup(View view) {
         Intent intent = new Intent(this, SignupActivity.class);
-        startActivity(intent);
+        this.startActivityForResult(intent, 101);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        finish();
     }
 
     // onClickEvent
     public void backToPrevious(View view) {
         finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

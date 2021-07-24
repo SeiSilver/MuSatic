@@ -1,6 +1,5 @@
 package com.viostaticapp.view;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -31,7 +30,7 @@ import com.viostaticapp.data.model.YoutubeVideo;
 import com.viostaticapp.present._common.VideoItemClickedEvent;
 import com.viostaticapp.present.searchPresent.SearchAdapter;
 import com.viostaticapp.service.SaveDataService;
-import com.viostaticapp.service.YoutubeAPISearch;
+import com.viostaticapp.data.api.YoutubeAPISearch;
 
 import org.apache.commons.text.StringEscapeUtils;
 
