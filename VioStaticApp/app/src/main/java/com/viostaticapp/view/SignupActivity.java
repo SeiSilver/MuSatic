@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -19,6 +21,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.viostaticapp.R;
 import com.viostaticapp.data.EnumInit;
@@ -33,6 +37,9 @@ public class SignupActivity extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
 
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,11 +53,14 @@ public class SignupActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-
+        pref = getSharedPreferences("VioStaticPref", Context.MODE_PRIVATE);
+        ;
+        editor = pref.edit();
     }
 
     // onClickEvent
     public void signup(View view) {
+
         progressDialog.setMessage("Registering...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -102,8 +112,6 @@ public class SignupActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         Toast.makeText(getApplicationContext(), "User registered successfully!",
                                                 Toast.LENGTH_SHORT).show();
-                                        finish();
-                                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -113,6 +121,8 @@ public class SignupActivity extends AppCompatActivity {
 
                                     }
                                 });
+
+                        saveSharedPreferences(authResult.getUser());
                         progressDialog.dismiss();
                     }
                 })
@@ -144,4 +154,29 @@ public class SignupActivity extends AppCompatActivity {
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    private void saveSharedPreferences(FirebaseUser user) {
+
+        editor.clear();
+
+        db.collection(EnumInit.Collections.User.name).document(user.getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
+                        editor.putString("username", task.getResult().get("name").toString());
+                        editor.commit();
+                        finish();
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    }
+                });
+
+    }
+
+
 }

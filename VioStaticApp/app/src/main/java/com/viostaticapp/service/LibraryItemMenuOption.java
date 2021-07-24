@@ -17,9 +17,12 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.viostaticapp.R;
@@ -32,16 +35,13 @@ import java.util.Map;
 
 public class LibraryItemMenuOption {
 
-    public static boolean isChanged = false;
+    private static FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static FirebaseUser user = firebaseAuth.getCurrentUser();
 
     // onclick
     @SuppressLint("RestrictedApi")
     public static void showPopupMenu(View v, YoutubeVideo video, Context context) {
-        isChanged = false;
-
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseUser  user = firebaseAuth.getCurrentUser();
 
         MenuBuilder menuBuilder = new MenuBuilder(context);
         MenuInflater inflater = new MenuInflater(context);
@@ -59,20 +59,17 @@ public class LibraryItemMenuOption {
                             data.put(video.getId(), video);
 
                             db.collection(EnumInit.Collections.Library.name).document(user.getEmail()).update(data)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
+                                        public void onSuccess(Void unused) {
                                             Toast.makeText(context, "Added to library successfully",
                                                     Toast.LENGTH_SHORT).show();
-
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-
-//                                            createAlert("Error", "Registered successfully but couldn't save details!", "OK");
-
+                                            db.collection(EnumInit.Collections.Library.name).document(user.getEmail()).set(data);
                                         }
                                     });
 
@@ -132,6 +129,5 @@ public class LibraryItemMenuOption {
         menuHelper.show();
 
     }
-
 
 }

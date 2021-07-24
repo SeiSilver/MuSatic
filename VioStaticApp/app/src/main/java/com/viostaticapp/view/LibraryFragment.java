@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,33 +24,22 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.viostaticapp.R;
 import com.viostaticapp.data.EnumInit;
-import com.viostaticapp.data.JsonSearchModel.ItemYT;
-import com.viostaticapp.data.JsonSearchModel.JsonSearchAPIModel;
-import com.viostaticapp.data.model.Channel;
 import com.viostaticapp.data.model.YoutubeVideo;
 import com.viostaticapp.present._common.VideoItemClickedEvent;
 import com.viostaticapp.present.libraryPresent.LibraryAdapter;
-import com.viostaticapp.service.SaveDataService;
-import com.viostaticapp.service.YoutubeAPISearch;
-
-import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LibraryFragment extends Fragment implements VideoItemClickedEvent, LibraryAdapter.CallReloadLibrary {
 
@@ -110,10 +98,9 @@ public class LibraryFragment extends Fragment implements VideoItemClickedEvent, 
 
     }
 
-
     private void reloadData() {
 
-        if (user != null || user.getEmail() != null) {
+        if (user != null) {
             database.collection(EnumInit.Collections.Library.name).document(user.getEmail())
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -190,18 +177,17 @@ public class LibraryFragment extends Fragment implements VideoItemClickedEvent, 
                             data.put(video.getId(), video);
 
                             db.collection(EnumInit.Collections.Library.name).document(user.getEmail()).update(data)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
+                                        public void onSuccess(Void unused) {
                                             Toast.makeText(getContext(), "Added to library successfully",
                                                     Toast.LENGTH_SHORT).show();
-
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-
+                                            db.collection(EnumInit.Collections.Library.name).document(user.getEmail()).set(data);
                                         }
                                     });
                         }
