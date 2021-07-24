@@ -35,13 +35,14 @@ import java.util.Map;
 
 public class LibraryItemMenuOption {
 
-    private static FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static FirebaseUser user = firebaseAuth.getCurrentUser();
 
     // onclick
     @SuppressLint("RestrictedApi")
     public static void showPopupMenu(View v, YoutubeVideo video, Context context) {
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
 
         MenuBuilder menuBuilder = new MenuBuilder(context);
         MenuInflater inflater = new MenuInflater(context);
