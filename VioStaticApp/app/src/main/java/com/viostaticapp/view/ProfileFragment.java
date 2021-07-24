@@ -123,7 +123,6 @@ public class ProfileFragment extends Fragment {
             profile_tv_user.setText(pref.getString("username", "username"));
         }
 
-        }
     }
 
     @Override
